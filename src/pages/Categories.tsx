@@ -9,7 +9,7 @@ export default function Categories() {
     <div className="min-h-screen bg-background">
       <Navbar />
       <main>
-        <div className="bg-gradient-hero py-12 md:py-16">
+        <div className="bg-gradient-hero pt-32 pb-12 md:pt-40 md:pb-16">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-3xl font-display font-bold md:text-4xl text-primary-foreground">All Categories</h1>
             <p className="mt-2 text-sm font-body text-primary-foreground/70">Browse 300+ business categories in Salem</p>

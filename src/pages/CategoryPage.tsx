@@ -16,7 +16,7 @@ export default function CategoryPage() {
     <div className="min-h-screen bg-background">
       <Navbar />
       <main>
-        <div className="bg-gradient-hero py-10 md:py-14">
+        <div className="bg-gradient-hero pt-32 pb-12 md:pt-40 md:pb-16">
           <div className="container mx-auto px-4">
             <div className="flex items-center gap-1.5 text-xs font-sans text-primary-foreground/60 mb-3">
               <Link to="/" className="hover:text-primary-foreground">Home</Link>

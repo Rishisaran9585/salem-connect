@@ -8,42 +8,65 @@ const benefits = [
   { icon: Smartphone, title: "Mobile Optimized", desc: "Your listing looks perfect on every device — phones, tablets, and desktops." },
   { icon: Target, title: "Targeted Audience", desc: "Reach people who are specifically looking for your type of business in Salem." },
   { icon: Star, title: "Build Credibility", desc: "Verified business badge builds trust with potential customers." },
-  { icon: Link2, title: "Networking Opportunities", desc: "Connect with other local businesses and create valuable partnerships." },
-  { icon: BarChart3, title: "Customer Insights", desc: "Understand how customers find and interact with your business." },
-  { icon: Zap, title: "Quick Lead Generation", desc: "Direct calls and inquiries from customers ready to buy." },
 ];
 
 export default function WhyListSection() {
   return (
-    <section className="py-14 md:py-20">
+    <section className="py-20 md:py-32 bg-background">
       <div className="container mx-auto px-4">
-        <div className="mb-10 text-center">
-          <h2 className="text-2xl font-display font-bold md:text-3xl text-foreground">
-            Why List Your Business?
-          </h2>
-          <p className="mt-2 text-sm font-body text-muted-foreground">
-            Join 5,000+ businesses already growing with Salem Directory
-          </p>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {benefits.map((b, i) => (
-            <motion.div
-              key={b.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
-              className="flex gap-4 rounded-xl border border-border bg-card p-5 shadow-card transition-shadow hover:shadow-elevated"
-            >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10">
-                <b.icon className="h-5 w-5 text-accent" />
-              </div>
-              <div>
-                <h3 className="text-sm font-sans font-semibold text-foreground">{b.title}</h3>
-                <p className="mt-1 text-xs font-body text-muted-foreground leading-relaxed">{b.desc}</p>
-              </div>
-            </motion.div>
-          ))}
+        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+          
+          {/* Left Column - Image */}
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="w-full lg:w-1/2"
+          >
+            <div className="relative rounded-[2.5rem] overflow-hidden shadow-elevated aspect-[4/5] lg:aspect-square">
+              <img 
+                src="/why-list.png" 
+                alt="Business Growth" 
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 border border-black/5 rounded-[2.5rem] pointer-events-none"></div>
+            </div>
+          </motion.div>
+
+          {/* Right Column - Content */}
+          <div className="w-full lg:w-1/2">
+            <div className="mb-12">
+              <h2 className="text-4xl font-display font-semibold md:text-5xl text-foreground tracking-tight leading-tight">
+                Why Elite Businesses Choose Us
+              </h2>
+              <p className="mt-4 text-lg font-body text-muted-foreground/90 max-w-lg">
+                Join Salem's most exclusive network. We provide the tools, visibility, and credibility you need to scale your local presence.
+              </p>
+            </div>
+            
+            <div className="grid gap-6 sm:grid-cols-2">
+              {benefits.map((b, i) => (
+                <motion.div
+                  key={b.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
+                  className="flex flex-col gap-3 rounded-2xl border border-border/50 bg-card p-6 shadow-sm transition-all duration-300 hover:shadow-elevated hover:-translate-y-1"
+                >
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-zinc-100 dark:bg-zinc-800">
+                    <b.icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-sans font-semibold text-foreground">{b.title}</h3>
+                    <p className="mt-2 text-sm font-body text-muted-foreground leading-relaxed">{b.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+          
         </div>
       </div>
     </section>

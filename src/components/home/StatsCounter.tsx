@@ -3,10 +3,10 @@ import { Building2, FolderOpen, MapPin, Star } from "lucide-react";
 import { motion } from "framer-motion";
 
 const stats = [
-  { icon: Building2, value: 5000, suffix: "+", label: "Businesses" },
+  { icon: Building2, value: 5000, suffix: "+", label: "Elite Businesses" },
   { icon: FolderOpen, value: 300, suffix: "+", label: "Categories" },
-  { icon: MapPin, value: 200, suffix: "+", label: "Areas" },
-  { icon: Star, value: 100, suffix: "%", label: "Verified" },
+  { icon: MapPin, value: 200, suffix: "+", label: "Areas Covered" },
+  { icon: Star, value: 100, suffix: "%", label: "Verified listings" },
 ];
 
 function Counter({ target, suffix }: { target: number; suffix: string }) {
@@ -40,7 +40,7 @@ function Counter({ target, suffix }: { target: number; suffix: string }) {
   }, [target]);
 
   return (
-    <div ref={ref} className="text-3xl md:text-4xl font-sans font-bold text-primary">
+    <div ref={ref} className="text-4xl md:text-5xl font-display font-semibold text-white tracking-tight mt-4">
       {count.toLocaleString()}{suffix}
     </div>
   );
@@ -48,23 +48,33 @@ function Counter({ target, suffix }: { target: number; suffix: string }) {
 
 export default function StatsCounter() {
   return (
-    <section className="py-12 md:py-16 bg-card">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+    <section className="relative py-20 md:py-32 overflow-hidden border-y border-border">
+      {/* Background Image */}
+      <div className="absolute inset-0 w-full h-full">
+        <img 
+          src="/stats-bg.png" 
+          alt="Platform Statistics" 
+          className="w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-black/80 backdrop-blur-[1px]"></div>
+      </div>
+
+      <div className="container relative z-10 mx-auto px-4">
+        <div className="grid grid-cols-2 gap-8 md:gap-6 md:grid-cols-4">
           {stats.map((s, i) => (
             <motion.div
               key={s.label}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="flex flex-col items-center text-center"
+              transition={{ delay: i * 0.1, duration: 0.6 }}
+              className="flex flex-col items-center text-center p-6 rounded-2xl bg-white/5 border border-white/10 glass-effect"
             >
-              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                <s.icon className="h-6 w-6 text-primary" />
+              <div className="mb-2 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10">
+                <s.icon className="h-7 w-7 text-white" />
               </div>
               <Counter target={s.value} suffix={s.suffix} />
-              <p className="mt-1 text-sm font-sans text-muted-foreground">{s.label}</p>
+              <p className="mt-2 text-sm font-sans font-medium text-white/70 uppercase tracking-widest">{s.label}</p>
             </motion.div>
           ))}
         </div>

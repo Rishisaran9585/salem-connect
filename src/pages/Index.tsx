@@ -1,7 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import HeroCarousel from "@/components/home/HeroCarousel";
-import SearchBar from "@/components/home/SearchBar";
 import StatsCounter from "@/components/home/StatsCounter";
 import FeaturedCategories from "@/components/home/FeaturedCategories";
 import AZCategorySection from "@/components/home/AZCategorySection";
@@ -14,7 +13,6 @@ export default function Index() {
       <Navbar />
       <main>
         <HeroCarousel />
-        <SearchBar />
         <StatsCounter />
         <FeaturedCategories />
         <AZCategorySection />

@@ -20,7 +20,7 @@ export default function AtoZ() {
     <div className="min-h-screen bg-background">
       <Navbar />
       <main>
-        <div className="bg-gradient-hero py-10 md:py-14">
+        <div className="bg-gradient-hero pt-32 pb-12 md:pt-40 md:pb-16">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-3xl font-display font-bold md:text-4xl text-primary-foreground">A-Z Business Directory</h1>
             <p className="mt-2 text-sm font-body text-primary-foreground/70">Find any business in Salem alphabetically</p>
