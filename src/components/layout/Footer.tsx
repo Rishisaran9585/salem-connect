@@ -1,47 +1,39 @@
 import { Link } from "react-router-dom";
-import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Youtube } from "lucide-react";
-import { partnerCities } from "@/data/categories";
+import { Facebook, Instagram, Twitter, Mail, Phone, MapPin, ShieldCheck, Heart } from "lucide-react";
 
 export default function Footer() {
-  return (
-    <footer className="bg-primary text-primary-foreground">
-      {/* Partner Cities */}
-      <div className="border-b border-primary-foreground/10">
-        <div className="container mx-auto px-4 py-8">
-          <h3 className="mb-4 text-lg font-display">Business Directories of Other Cities</h3>
-          <div className="flex flex-wrap gap-2">
-            {partnerCities.map((city) => (
-              <span
-                key={city}
-                className="rounded-full border border-primary-foreground/20 px-3 py-1 text-xs font-sans text-primary-foreground/70 hover:bg-primary-foreground/10 transition-colors cursor-pointer"
-              >
-                {city}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
+  const currentYear = new Date().getFullYear();
 
-      {/* Main Footer */}
-      <div className="container mx-auto px-4 py-10">
-        <div className="grid gap-8 md:grid-cols-4">
-          {/* Brand */}
-          <div>
-            <Link to="/" className="inline-flex items-center gap-1.5 mb-3">
-              <span className="text-xl font-bold font-sans">Salem</span>
-              <span className="text-xl font-display italic text-gold">Directory</span>
+  const cities = ["Tiruchirappalli", "Tirupur", "Thoothukudi", "Vellore", "Erode", "Madurai", "Chennai", "Coimbatore"];
+  const categories = ["Restaurants", "Real Estate", "Silk Sarees", "Hospitals", "Automotive", "Education"];
+
+  return (
+    <footer className="bg-[#1B4332] text-white pt-32 pb-16 overflow-hidden relative">
+      {/* Decorative Branding Ring */}
+      <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#C9973A]/10 rounded-full blur-3xl" />
+      <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
+
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
+          
+          {/* Brand Column */}
+          <div className="space-y-8">
+            <Link to="/" className="flex flex-col items-start">
+                <span className="text-3xl font-bold font-['DM_Sans'] text-white">
+                    Salem 
+                    <span className="italic font-['Playfair_Display'] text-[#C9973A] ml-2">Directory</span>
+                </span>
+                <span className="text-xs uppercase tracking-widest font-['DM_Mono'] text-white/50 mt-1">
+                    salem.idbf.in
+                </span>
             </Link>
-            <p className="text-sm font-body text-primary-foreground/70 leading-relaxed">
-              India's #1 Local Business Network — Salem. Find every business in Salem District, Tamil Nadu.
+            <p className="text-white/60 font-body text-sm leading-relaxed max-w-xs">
+              Salem's most trusted local business network. We help businesses grow and customers find exactly what they need in Salem district.
             </p>
-            <div className="mt-4 flex gap-3">
-              {[Facebook, Twitter, Instagram, Youtube].map((Icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-foreground/10 text-primary-foreground/70 hover:bg-accent hover:text-accent-foreground transition-colors"
-                >
-                  <Icon className="h-4 w-4" />
+            <div className="flex gap-4">
+              {[Facebook, Instagram, Twitter].map((Icon, i) => (
+                <a key={i} href="#" className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center hover:bg-[#C9973A] transition-all transform hover:-translate-y-1 shadow-lg">
+                  <Icon size={20} />
                 </a>
               ))}
             </div>
@@ -49,70 +41,65 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="mb-3 text-sm font-sans font-semibold uppercase tracking-wider text-gold">Quick Links</h4>
-            <ul className="space-y-2">
-              {[
-                { label: "Home", to: "/" },
-                { label: "All Categories", to: "/categories" },
-                { label: "A-Z Business List", to: "/a-z" },
-                { label: "About Us", to: "/about" },
-                { label: "Contact Us", to: "/contact" },
-              ].map((l) => (
-                <li key={l.to}>
-                  <Link to={l.to} className="text-sm font-body text-primary-foreground/70 hover:text-gold transition-colors">
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
+            <h4 className="text-xl font-display font-bold mb-8 border-b border-white/10 pb-4">Explore</h4>
+            <ul className="space-y-4 font-sans text-sm font-medium text-white/60">
+              <li><Link to="/" className="hover:text-[#C9973A] transition-colors">Home</Link></li>
+              <li><Link to="/categories" className="hover:text-[#C9973A] transition-colors">All Categories</Link></li>
+              <li><Link to="/a-z" className="hover:text-[#C9973A] transition-colors">A-Z Business List</Link></li>
+              <li><Link to="/about" className="hover:text-[#C9973A] transition-colors">About Directory</Link></li>
+              <li><Link to="/contact" className="hover:text-[#C9973A] transition-colors">Contact Us</Link></li>
             </ul>
           </div>
 
           {/* Top Categories */}
           <div>
-            <h4 className="mb-3 text-sm font-sans font-semibold uppercase tracking-wider text-gold">Top Categories</h4>
-            <ul className="space-y-2">
-              {["Restaurants", "Hospitals", "Schools", "Hotels", "Advocates", "Salons"].map((c) => (
-                <li key={c}>
-                  <Link to={`/category/${c.toLowerCase()}`} className="text-sm font-body text-primary-foreground/70 hover:text-gold transition-colors">
-                    {c}
-                  </Link>
-                </li>
+            <h4 className="text-xl font-display font-bold mb-8 border-b border-white/10 pb-4">Top Categories</h4>
+            <ul className="space-y-4 font-sans text-sm font-medium text-white/60">
+              {categories.map((cat, i) => (
+                <li key={i}><Link to={`/category/${cat.toLowerCase().replace(' ', '-')}`} className="hover:text-[#C9973A] transition-colors">{cat}</Link></li>
               ))}
             </ul>
           </div>
 
-          {/* Contact */}
-          <div>
-            <h4 className="mb-3 text-sm font-sans font-semibold uppercase tracking-wider text-gold">Contact Us</h4>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-2 text-sm font-body text-primary-foreground/70">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                Salem District, Tamil Nadu, India
-              </li>
-              <li className="flex items-center gap-2 text-sm font-body text-primary-foreground/70">
-                <Phone className="h-4 w-4 shrink-0 text-gold" />
-                +91 94422 XXXXX
-              </li>
-              <li className="flex items-center gap-2 text-sm font-body text-primary-foreground/70">
-                <Mail className="h-4 w-4 shrink-0 text-gold" />
-                info@salemdirectory.in
-              </li>
-            </ul>
-            <Link to="/register">
-              <button className="mt-4 w-full rounded-md bg-gradient-gold px-4 py-2.5 text-sm font-sans font-semibold text-accent-foreground hover:opacity-90 transition-opacity">
-                List Your Business — ₹150
-              </button>
-            </Link>
+          {/* List Your Business CTA */}
+          <div className="bg-white/5 rounded-[2.5rem] p-10 border border-white/10 text-center relative group">
+             <div className="absolute inset-0 bg-[#C9973A]/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-[2.5rem]" />
+             <h4 className="text-2xl font-display font-bold mb-4">List Business</h4>
+             <p className="text-white/40 text-xs mb-8 uppercase tracking-widest font-bold">One-time fee ₹150</p>
+             <Link to="/register">
+               <button className="bg-[#C9973A] hover:bg-white hover:text-[#1B4332] text-white w-full py-4 rounded-2xl font-bold font-sans shadow-2xl transition-all h-auto px-6 whitespace-nowrap">
+                 Register Free Now
+               </button>
+             </Link>
+             <p className="mt-6 text-[10px] text-white/30 font-medium">Over 5,000+ businesses joined</p>
           </div>
         </div>
-      </div>
 
-      {/* Bottom */}
-      <div className="border-t border-primary-foreground/10">
-        <div className="container mx-auto px-4 py-4 text-center">
-          <p className="text-xs font-sans text-primary-foreground/50">
-            © {new Date().getFullYear()} Salem Directory — Find Every Business in Salem. Built for Salem District, Tamil Nadu, India.
-          </p>
+        {/* Network Hub Section */}
+        <div className="pt-16 border-t border-white/10">
+           <div className="flex flex-col md:flex-row justify-between items-center gap-10">
+             <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-4">
+                {cities.map((city) => (
+                  <a key={city} href="#" className="text-xs font-bold font-sans text-white/30 hover:text-[#C9973A] transition-colors uppercase tracking-widest">
+                    {city} Directory
+                  </a>
+                ))}
+             </div>
+             <div className="flex items-center gap-3 bg-white/5 px-6 py-3 rounded-full border border-white/10">
+                <ShieldCheck size={16} className="text-[#C9973A]" />
+                <span className="text-xs font-bold font-sans tracking-widest">#1 BUSINESS NETWORK</span>
+             </div>
+           </div>
+        </div>
+
+        {/* Copyright */}
+        <div className="mt-20 pt-10 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-white/30 text-xs font-medium font-sans gap-6 text-center md:text-left">
+           <p>© {currentYear} Salem Directory. Owned by salem.idbf.in. All Rights Reserved.</p>
+           <div className="flex items-center gap-2">
+             <span>Handcrafted with</span>
+             <Heart size={12} className="text-red-500 fill-red-500 animate-pulse" />
+             <span>for Salem District</span>
+           </div>
         </div>
       </div>
     </footer>

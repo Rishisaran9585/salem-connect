@@ -1,129 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono&family=Lora:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 105 20% 95%;
-    --foreground: 240 28% 14%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 240 28% 14%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 28% 14%;
-
-    --primary: 150 42% 18%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 105 20% 95%;
-    --secondary-foreground: 240 28% 14%;
-
-    --muted: 220 13% 91%;
-    --muted-foreground: 220 9% 46%;
-
-    --accent: 37 55% 51%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
-
-    --success: 142 71% 45%;
-    --success-foreground: 0 0% 100%;
-
-    --warning: 38 92% 50%;
-    --warning-foreground: 240 28% 14%;
-
-    --border: 150 15% 85%;
-    --input: 150 15% 85%;
-    --ring: 150 42% 18%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 150 42% 18%;
-    --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 37 55% 51%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 150 35% 25%;
-    --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 150 30% 25%;
-    --sidebar-ring: 37 55% 51%;
-
-    --font-display: 'Playfair Display', Georgia, serif;
-    --font-sans: 'DM Sans', system-ui, sans-serif;
-    --font-body: 'Lora', Georgia, serif;
-    --font-mono: 'DM Mono', monospace;
-
-    --gradient-hero: linear-gradient(135deg, hsl(150, 42%, 18%) 0%, hsl(150, 35%, 12%) 100%);
-    --gradient-gold: linear-gradient(135deg, hsl(37, 55%, 51%) 0%, hsl(37, 65%, 58%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(0, 0%, 100%) 0%, hsl(105, 20%, 97%) 100%);
-    --shadow-card: 0 4px 24px -4px hsl(150 42% 18% / 0.08);
-    --shadow-elevated: 0 12px 40px -8px hsl(150 42% 18% / 0.15);
+    --primary-dark: #1B4332;
+    --primary-gold: #C9973A;
+    --accent-light: #F0F4EF;
+    --text-dark: #1A1A2E;
+    --text-muted: #6B7280;
+    --card-bg: #FFFFFF;
+    --success: #22C55E;
+    --warning: #F59E0B;
+    
+    --radius-lg: 1rem;
+    --radius-md: 0.75rem;
+    --radius-sm: 0.5rem;
   }
 
-  .dark {
-    --background: 240 28% 8%;
-    --foreground: 0 0% 95%;
-    --card: 240 20% 12%;
-    --card-foreground: 0 0% 95%;
-    --popover: 240 20% 12%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 37 55% 51%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 240 15% 18%;
-    --secondary-foreground: 0 0% 95%;
-    --muted: 240 15% 18%;
-    --muted-foreground: 220 9% 60%;
-    --accent: 150 42% 25%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 95%;
-    --border: 240 15% 20%;
-    --input: 240 15% 20%;
-    --ring: 37 55% 51%;
-    --sidebar-background: 240 28% 6%;
-    --sidebar-foreground: 0 0% 90%;
-    --sidebar-primary: 37 55% 51%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 15% 15%;
-    --sidebar-accent-foreground: 0 0% 90%;
-    --sidebar-border: 240 15% 15%;
-    --sidebar-ring: 37 55% 51%;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-[var(--accent-light)] text-[var(--text-dark)] font-['Lora'];
   }
-  h1, h2, h3 {
-    font-family: var(--font-display);
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-['Playfair_Display'] font-bold text-[var(--primary-dark)];
   }
-  p, span, li {
-    font-family: var(--font-body);
+
+  .nav-link {
+    @apply font-['DM_Sans'] font-medium text-[var(--text-dark)] hover:text-[var(--primary-gold)] transition-colors;
   }
-  nav, button, input, select, label {
-    font-family: var(--font-sans);
+
+  .btn-gold {
+    @apply bg-[var(--primary-gold)] text-white px-6 py-2.5 rounded-[var(--radius-md)] font-['DM_Sans'] font-bold hover:brightness-110 transition-all shadow-lg hover:shadow-xl active:scale-95;
   }
-  code, pre {
-    font-family: var(--font-mono);
+
+  .glass-morphism {
+    @apply bg-white/70 backdrop-blur-md border border-white/20;
   }
 }
 
-@layer utilities {
-  .font-display { font-family: var(--font-display); }
-  .font-sans { font-family: var(--font-sans); }
-  .font-body { font-family: var(--font-body); }
-  .font-mono { font-family: var(--font-mono); }
-  .bg-gradient-hero { background: var(--gradient-hero); }
-  .bg-gradient-gold { background: var(--gradient-gold); }
-  .bg-gradient-card { background: var(--gradient-card); }
-  .shadow-card { box-shadow: var(--shadow-card); }
-  .shadow-elevated { box-shadow: var(--shadow-elevated); }
-  .text-gold { color: hsl(37, 55%, 51%); }
-  .bg-gold { background-color: hsl(37, 55%, 51%); }
-  .border-gold { border-color: hsl(37, 55%, 51%); }
+@layer components {
+  .hero-gradient {
+    background: linear-gradient(135deg, rgba(27, 67, 50, 0.95) 0%, rgba(27, 67, 50, 0.8) 100%);
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl border-none;
+  }
+}
+
+.carousel-container {
+  overflow: hidden;
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  min-width: 0;
 }
