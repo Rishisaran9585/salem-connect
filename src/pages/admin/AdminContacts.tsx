@@ -1,19 +1,94 @@
-import { Mail, MailOpen, CheckCircle } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Mail, MailOpen, CheckCircle, Trash2 } from "lucide-react";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { API } from "@/lib/api";
 
-const contacts = [
-  { id: 1, name: "Kumar S.", reason: "Business Listing Information Wrong", business: "Sri Textiles", message: "My phone number is incorrect on the listing.", status: "new", date: "2 hours ago" },
-  { id: 2, name: "Priya R.", reason: "General Inquiry", business: "N/A", message: "How do I upgrade my listing to featured?", status: "read", date: "Yesterday" },
-  { id: 3, name: "Mohan K.", reason: "Want to Remove My Listing", business: "Mohan Electricals", message: "I have closed my business. Please remove.", status: "new", date: "Yesterday" },
-  { id: 4, name: "Deepa V.", reason: "Technical Issue", business: "Fresh Bakery", message: "Cannot see my listing when I search.", status: "resolved", date: "3 days ago" },
-  { id: 5, name: "Ravi T.", reason: "Partnership / Advertising", business: "TechStart", message: "Interested in advertising on Salem Directory.", status: "read", date: "4 days ago" },
-];
+interface Contact {
+  id: number;
+  name: string;
+  email?: string;
+  mobile: string;
+  business_name?: string;
+  reason?: string;
+  message: string;
+  status: string;
+  created_at: string;
+}
 
 export default function AdminContacts() {
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [filter, setFilter] = useState("all");
+  const [loading, setLoading] = useState(true);
+
+  const fetchContacts = async () => {
+    try {
+      const url = filter === "all" ? API.admin.CONTACTS : `${API.admin.CONTACTS}?status=${filter}`;
+      const res = await axios.get(url, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("admin_token")}` }
+      });
+      if (res.data.success) {
+        setContacts(res.data.data);
+      }
+    } catch (err) {
+      toast.error("Failed to load contacts");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchContacts();
+  }, [filter]);
+
+  const updateStatus = async (id: number, status: string) => {
+    try {
+      const res = await axios.put(API.admin.CONTACTS, {
+        id,
+        status
+      }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("admin_token")}` }
+      });
+      if (res.data.success) {
+        toast.success("Status updated");
+        fetchContacts();
+      }
+    } catch (err) {
+      toast.error("Failed to update status");
+    }
+  };
+
+  const deleteContact = async (id: number) => {
+    if (!window.confirm("Delete this contact?")) return;
+    try {
+      const res = await axios.delete(`${API.admin.CONTACTS}?id=${id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("admin_token")}` }
+      });
+      if (res.data.success) {
+        toast.success("Contact deleted");
+        fetchContacts();
+      }
+    } catch (err) {
+      toast.error("Failed to delete contact");
+    }
+  };
+
+  if (loading) {
+    return <div className="text-center py-8">Loading contacts...</div>;
+  }
+
   return (
     <div className="space-y-4">
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-wrap">
         {["all", "new", "read", "resolved"].map((f) => (
-          <button key={f} className="rounded-md bg-secondary px-3 py-1.5 text-xs font-sans font-medium capitalize text-muted-foreground hover:bg-muted transition-colors">
+          <button 
+            key={f}
+            onClick={() => setFilter(f)}
+            className={`rounded-md px-3 py-1.5 text-xs font-sans font-medium capitalize transition-colors ${
+              filter === f
+                ? "bg-primary text-primary-foreground"
+                : "bg-secondary text-muted-foreground hover:bg-muted"
+            }`}>
             {f}
           </button>
         ))}
@@ -23,26 +98,43 @@ export default function AdminContacts() {
         {contacts.map((c) => (
           <div key={c.id} className={`rounded-xl border bg-card p-4 shadow-card transition-colors ${c.status === "new" ? "border-accent/30" : "border-border"}`}>
             <div className="flex items-start justify-between">
-              <div className="flex items-start gap-3">
+              <div className="flex items-start gap-3 flex-1">
                 <div className="mt-0.5">
                   {c.status === "new" ? <Mail className="h-4 w-4 text-accent" /> : c.status === "resolved" ? <CheckCircle className="h-4 w-4 text-success" /> : <MailOpen className="h-4 w-4 text-muted-foreground" />}
                 </div>
-                <div>
+                <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-sans font-semibold text-foreground">{c.name}</span>
-                    <span className={`rounded-full px-2 py-0.5 text-[10px] font-sans font-medium ${
+                    <span className={`rounded-full px-2 py-0.5 text-[10px] font-sans font-medium cursor-pointer transition-colors ${
                       c.status === "new" ? "bg-accent/10 text-accent" : c.status === "resolved" ? "bg-success/10 text-success" : "bg-secondary text-muted-foreground"
                     }`}>
                       {c.status}
                     </span>
                   </div>
-                  <p className="text-xs font-mono text-accent mt-0.5">{c.reason}</p>
-                  {c.business !== "N/A" && <p className="text-xs font-body text-muted-foreground">Business: {c.business}</p>}
+                  <p className="text-xs font-mono text-accent mt-0.5">{c.reason || "General"}</p>
+                  {c.business_name && <p className="text-xs font-body text-muted-foreground">Business: {c.business_name}</p>}
                   <p className="mt-1.5 text-sm font-body text-muted-foreground">{c.message}</p>
+                  <p className="text-xs text-muted-foreground mt-1">📧 {c.email || c.mobile}</p>
                 </div>
               </div>
-              <span className="text-xs font-body text-muted-foreground shrink-0">{c.date}</span>
+              <div className="flex gap-2 ml-2">
+                {c.status !== "resolved" && (
+                  <button
+                    onClick={() => updateStatus(c.id, c.status === "new" ? "read" : "resolved")}
+                    className="text-xs px-2 py-1 rounded bg-secondary hover:bg-secondary/80 text-muted-foreground"
+                  >
+                    {c.status === "new" ? "Mark Read" : "Resolve"}
+                  </button>
+                )}
+                <button
+                  onClick={() => deleteContact(c.id)}
+                  className="text-xs px-2 py-1 rounded bg-destructive/10 hover:bg-destructive/20 text-destructive"
+                >
+                  <Trash2 className="h-3 w-3" />
+                </button>
+              </div>
             </div>
+            <span className="text-xs font-body text-muted-foreground float-right mt-2">{new Date(c.created_at).toLocaleDateString()}</span>
           </div>
         ))}
       </div>

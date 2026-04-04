@@ -28,13 +28,19 @@ if ($method === 'GET') {
     $imageUrl = $data['image_url'] ?? '';
     $description = $data['description'] ?? '';
     
-    $stmt = $pdo->prepare("INSERT INTO categories (name, slug, icon, image_url, description) VALUES (?, ?, ?, ?, ?)");
     try {
+        $stmt = $pdo->prepare("INSERT INTO categories (name, slug, icon, image_url, description, is_active) VALUES (?, ?, ?, ?, ?, 1)");
         $stmt->execute([$name, $slug, $icon, $imageUrl, $description]);
         $newId = $pdo->lastInsertId();
-        sendResponse(true, ['id' => $newId], "Category created successfully");
+        
+        // Return the newly created category with all details
+        $stmt = $pdo->prepare("SELECT * FROM categories WHERE id = ?");
+        $stmt->execute([$newId]);
+        $newCategory = $stmt->fetch();
+        
+        sendResponse(true, $newCategory, "Category created successfully");
     } catch (PDOException $e) {
-        sendResponse(false, null, "Slug already exists: " . $e->getMessage(), 500);
+        sendResponse(false, null, "Error creating category: " . $e->getMessage(), 500);
     }
 } else if ($method === 'PUT') {
     // Update category

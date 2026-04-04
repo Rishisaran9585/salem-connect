@@ -11,6 +11,14 @@ export default defineConfig(({ mode }) => ({
     hmr: {
       overlay: false,
     },
+    proxy: {
+      '/backend': {
+        target: 'https://maroon-finch-443423.hostingersite.com',
+        changeOrigin: true,
+        rewrite: (path: string) => '/backend' + path,
+        secure: true,
+      }
+    }
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {

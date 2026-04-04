@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   LineChart, Line, AreaChart, Area, PieChart, Pie, Cell 
@@ -8,6 +8,7 @@ import {
   MessageSquare, TrendingUp, ArrowUpRight 
 } from "lucide-react";
 import axios from "axios";
+import { API } from "@/lib/api";
 
 interface DashboardStats {
   stats: {
@@ -33,18 +34,38 @@ const COLORS = ["#1B4332", "#C9973A", "#22C55E", "#F59E0B"];
 export default function AdminDashboard() {
   const [data, setData] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost/salem-connect/backend/api/v1/admin/stats.php", {
-          headers: { Authorization: `Bearer ${localStorage.getItem("admin_token")}` }
+        setError("");
+        const token = localStorage.getItem("admin_token");
+        if (!token) {
+          setError("Not authenticated. Please log in again.");
+          setLoading(false);
+          return;
+        }
+
+        const res = await axios.get(API.admin.STATS, {
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
         });
+        
         if (res.data.success) {
           setData(res.data.data);
+        } else {
+          setError(res.data.message || "Failed to load statistics");
         }
-      } catch (err) {
-        console.error("Failed to fetch dashboard stats", err);
+      } catch (err: any) {
+        console.error("Error fetching dashboard stats:", err);
+        if (err.response?.status === 401) {
+          setError("Session expired. Please log in again.");
+        } else {
+          setError(err.response?.data?.message || "Error loading statistics");
+        }
       } finally {
         setLoading(false);
       }
@@ -53,6 +74,7 @@ export default function AdminDashboard() {
   }, []);
 
   if (loading) return <div className="p-10 font-sans animate-pulse">Analyzing dashboard data...</div>;
+  if (error) return <div className="p-10 text-red-500 font-bold font-sans">{error}</div>;
   if (!data) return <div className="p-10 text-red-500 font-bold font-sans">Error loading statistics.</div>;
 
   const statCards = [

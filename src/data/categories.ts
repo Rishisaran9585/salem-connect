@@ -5,12 +5,14 @@ import {
   Camera, Plane, BookOpen, Scissors, Baby, Dog, Flower2,
   Music, Gem, ShieldCheck, Truck, Wifi
 } from "lucide-react";
+import { type LucideIcon } from "lucide-react";
+
 
 export interface Category {
   id: number;
   name: string;
   slug: string;
-  icon: any;
+  icon: LucideIcon;
   count: number;
   description: string;
 }
@@ -73,7 +75,7 @@ export const allCategories: Category[] = [
   { id: 30, name: "Internet & Telecom", slug: "internet-telecom", icon: Wifi, count: 72, description: "ISP providers, DTH services, and mobile recharge" },
 ];
 
-export const alphabetCategories: Record<string, string[]> = {
+const initialAlphabetCategories: Record<string, string[]> = {
   A: ["Academies", "AC Dealers", "AC Repair Shops", "Accountants", "Advertising Agency", "Advocates", "Almira Shops", "Aluminum Door Shops", "Ambulance Services", "Architects", "Artificial Jewellery", "Artists", "Ashram", "Astrologers", "Auto Parts Shops", "Ayurvedic Stores"],
   B: ["Bags & Hardware", "Bakeries", "Bangles Store", "Banks & ATM", "Banquet Halls", "Beauty Parlours", "Belt Shops", "Blood Banks", "Book Binding", "Book Stores", "Boutiques", "Brick Companies", "Builders", "Bungalows On Rent"],
   C: ["Car Dealers", "Car Accessories", "Car Washing", "Caterers", "Cement Dealers", "Chartered Accountants", "Chemists", "Civil Contractors", "Clothing Stores", "Coaching Centers", "Coffee Shops", "Computer Repair", "Courier Services", "Cyber Cafes"],
@@ -101,6 +103,19 @@ export const alphabetCategories: Record<string, string[]> = {
   Y: ["Yoga Centers", "Youth Hostels"],
   Z: ["Zari Work", "Zinc Dealers"],
 };
+
+// Auto-merge allCategories into alphabetCategories
+export const alphabetCategories: Record<string, string[]> = { ...initialAlphabetCategories };
+
+allCategories.forEach(cat => {
+  const firstLetter = cat.name.charAt(0).toUpperCase();
+  if (alphabetCategories[firstLetter]) {
+    if (!alphabetCategories[firstLetter].includes(cat.name)) {
+      alphabetCategories[firstLetter].push(cat.name);
+      alphabetCategories[firstLetter].sort();
+    }
+  }
+});
 
 export const sampleBusinesses: Business[] = [
   { id: 1, slug: "sri-lakshmi-textiles", businessName: "Sri Lakshmi Textiles", ownerName: "R. Senthil Kumar", categoryId: 10, categoryName: "Clothing & Fashion", description: "Premium textile showroom offering sarees, dress materials, and ready-made garments for men, women, and children. Serving Salem since 1985.", address: "45, Omalur Main Road, Near Bus Stand", area: "Omalur Road", city: "Salem", state: "Tamil Nadu", pincode: "636001", mobile: "+91 94422 12345", mobileAlt: "+91 427 2312345", email: "info@srilakshmitextiles.com", website: "www.srilakshmitextiles.com", verified: true, status: "approved" },

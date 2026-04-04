@@ -1,18 +1,18 @@
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate, Navigate } from "react-router-dom";
 import {
   LayoutDashboard, Building2, FolderOpen, MessageSquare,
-  CreditCard, Settings, LogOut, Clock, Menu, X
+  CreditCard, Settings, LogOut, Clock, Menu, X, Layout
 } from "lucide-react";
 import { useState } from "react";
 
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", to: "/admin" },
+  { icon: Layout, label: "Hero Carousel", to: "/admin/hero" },
   { icon: Building2, label: "Businesses", to: "/admin/businesses" },
   { icon: Clock, label: "Pending", to: "/admin/businesses/pending" },
   { icon: FolderOpen, label: "Categories", to: "/admin/categories" },
   { icon: MessageSquare, label: "Contacts", to: "/admin/contacts" },
   { icon: CreditCard, label: "Payments", to: "/admin/payments" },
-  { icon: Settings, label: "Settings", to: "/admin/settings" },
 ];
 
 export default function AdminLayout() {
@@ -20,7 +20,14 @@ export default function AdminLayout() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // Auth Guard: If no token is present, redirect to login
+  const token = localStorage.getItem("admin_token");
+  if (!token) {
+    return <Navigate to="/admin/login" state={{ from: location }} replace />;
+  }
+
   const handleLogout = () => {
+    localStorage.removeItem("admin_token");
     localStorage.removeItem("admin_logged_in");
     navigate("/admin/login");
   };

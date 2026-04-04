@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
-import { Facebook, Instagram, Twitter, Mail, Phone, MapPin, ShieldCheck, Heart } from "lucide-react";
+import { Facebook, Instagram, Twitter, Heart } from "lucide-react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
-  const cities = ["Tiruchirappalli", "Tirupur", "Thoothukudi", "Vellore", "Erode", "Madurai", "Chennai", "Coimbatore"];
   const categories = ["Restaurants", "Real Estate", "Silk Sarees", "Hospitals", "Automotive", "Education"];
 
   return (
@@ -46,6 +45,7 @@ export default function Footer() {
               <li><Link to="/" className="hover:text-[#C9973A] transition-colors">Home</Link></li>
               <li><Link to="/categories" className="hover:text-[#C9973A] transition-colors">All Categories</Link></li>
               <li><Link to="/a-z" className="hover:text-[#C9973A] transition-colors">A-Z Business List</Link></li>
+              <li><Link to="/a-z-categories" className="hover:text-[#C9973A] transition-colors">A-Z Category Archive</Link></li>
               <li><Link to="/about" className="hover:text-[#C9973A] transition-colors">About Directory</Link></li>
               <li><Link to="/contact" className="hover:text-[#C9973A] transition-colors">Contact Us</Link></li>
             </ul>
@@ -75,22 +75,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Network Hub Section */}
-        <div className="pt-16 border-t border-white/10">
-           <div className="flex flex-col md:flex-row justify-between items-center gap-10">
-             <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-4">
-                {cities.map((city) => (
-                  <a key={city} href="#" className="text-xs font-bold font-sans text-white/30 hover:text-[#C9973A] transition-colors uppercase tracking-widest">
-                    {city} Directory
-                  </a>
-                ))}
-             </div>
-             <div className="flex items-center gap-3 bg-white/5 px-6 py-3 rounded-full border border-white/10">
-                <ShieldCheck size={16} className="text-[#C9973A]" />
-                <span className="text-xs font-bold font-sans tracking-widest">#1 BUSINESS NETWORK</span>
-             </div>
-           </div>
-        </div>
 
         {/* Copyright */}
         <div className="mt-20 pt-10 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-white/30 text-xs font-medium font-sans gap-6 text-center md:text-left">

@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /backend/api/v1/
+    
+    # Don't rewrite actual files or directories
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    
+    # Allow Authorization header
+    RewriteCond %{REQUEST_FILENAME} \.php$ [OR]
+    RewriteCond %{REQUEST_METHOD} ^(POST|PUT|DELETE)$
+    RewriteRule ^ - [L]
+</IfModule>
+
+# Pass Authorization header through
+<IfModule mod_headers.c>
+    SetEnvIf Authorization ^(.*)$ HTTP_AUTHORIZATION=$1
+</IfModule>

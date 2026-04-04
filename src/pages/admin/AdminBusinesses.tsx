@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect, useCallback } from "react";
 import { 
   Search, Filter, CheckCircle, XCircle, Trash2, 
   MapPin, Phone, Mail, Globe, Clock, ShieldCheck, 
@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
+import { API } from "@/lib/api";
 
 interface Business {
   id: number;
@@ -32,10 +33,10 @@ export default function AdminBusinesses() {
   const [search, setSearch] = useState("");
   const [selectedBiz, setSelectedBiz] = useState<Business | null>(null);
 
-  const fetchBusinesses = async () => {
+  const fetchBusinesses = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`http://localhost/salem-connect/backend/api/v1/admin/businesses.php?status=${filter}&search=${search}`, {
+      const res = await axios.get(`${API.admin.BUSINESSES}?status=${filter}&search=${search}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("admin_token")}` }
       });
       if (res.data.success) setBusinesses(res.data.data);
@@ -44,15 +45,15 @@ export default function AdminBusinesses() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter, search]);
 
   useEffect(() => {
     fetchBusinesses();
-  }, [filter, search]);
+  }, [fetchBusinesses]);
 
   const updateStatus = async (id: number, status: string, verified: boolean = false) => {
     try {
-      const res = await axios.put("http://localhost/salem-connect/backend/api/v1/admin/businesses.php", {
+      const res = await axios.put(API.admin.BUSINESSES, {
         id, status, verified
       }, {
         headers: { Authorization: `Bearer ${localStorage.getItem("admin_token")}` }
@@ -70,7 +71,7 @@ export default function AdminBusinesses() {
   const deleteBiz = async (id: number) => {
     if (!window.confirm("Delete this listing permanently?")) return;
     try {
-      await axios.delete(`http://localhost/salem-connect/backend/api/v1/admin/businesses.php?id=${id}`, {
+      await axios.delete(`${API.admin.BUSINESSES}?id=${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("admin_token")}` }
       });
       toast.success("Listing removed");
