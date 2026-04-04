@@ -1,79 +1,85 @@
-import { UserPlus, Star, Users } from "lucide-react";
+import { ClipboardList, ShieldCheck, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 
 const steps = [
-  { 
-    icon: UserPlus, 
-    title: "1. Register Business", 
-    desc: "Fill in your basic details, choose proper categories and submit your application." 
-  },
-  { 
-    icon: Star, 
-    title: "2. Simple Verification", 
-    desc: "A small one-time processing fee of ₹150 ensures your listing is verified and trustworthy." 
-  },
-  { 
-    icon: Users, 
-    title: "3. Start Getting Customers", 
-    desc: "Once approved, your business goes live. Start receiving calls and inquiries instantly." 
-  },
+  { icon: ClipboardList, step: "01", title: "Apply for Listing", desc: "Submit your business details through our seamless application portal." },
+  { icon: ShieldCheck, step: "02", title: "Fast Verification", desc: "Our team verifies your credentials to maintain directory exclusivity." },
+  { icon: Users, step: "03", title: "Connect & Grow", desc: "Your profile goes live, connecting you instantly with elite clientele." },
 ];
 
 export default function HowItWorks() {
   return (
-    <section className="py-24 bg-white relative overflow-hidden">
+    <section className="py-12 md:py-20 bg-zinc-50 dark:bg-zinc-900 overflow-hidden">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-20">
-          <motion.h2 
-            initial={{ y: 20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            className="text-4xl md:text-5xl font-display font-bold text-[#1B4332]"
-          >
-            How it <span className="text-[#C9973A]">Works</span>
-          </motion.h2>
-          <div className="w-24 h-1 bg-[#C9973A] mx-auto mt-6 rounded-full" />
-        </div>
+        <div className="flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-16">
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 relative">
-          {/* Connecting Line (Desktop) */}
-          <div className="hidden md:block absolute top-[28%] left-[20%] right-[20%] h-0.5 bg-gray-100 -z-10" />
-
-          {steps.map((step, idx) => (
-            <motion.div 
-              key={idx}
-              initial={{ y: 30, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              transition={{ delay: idx * 0.1, duration: 0.5 }}
-              viewport={{ once: true }}
-              className="flex flex-col items-center text-center p-8 rounded-3xl bg-[#1B4332]/5 hover:bg-[#1B4332]/10 transition-colors border border-dashed border-[#1B4332]/20 shadow-xl"
-            >
-              <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center text-[#C9973A] shadow-xl mb-8 relative border-4 border-[#1B4332]/10">
-                <step.icon className="w-10 h-10" />
-                <span className="absolute -top-2 -right-2 w-10 h-10 bg-[#1B4332] text-white rounded-full flex items-center justify-center font-sans font-bold shadow-lg">
-                  {idx + 1}
-                </span>
-              </div>
-              <h3 className="text-2xl font-display font-bold mb-4 text-[#1B4332]">
-                {step.title}
-              </h3>
-              <p className="font-body text-gray-500 leading-relaxed mb-6">
-                {step.desc}
+          {/* Left Column - Steps */}
+          <div className="w-full lg:w-1/2">
+            <div className="mb-10">
+              <h2 className="text-3xl font-display font-semibold md:text-4xl text-foreground tracking-tight leading-tight">
+                Effortless Onboarding
+              </h2>
+              <p className="mt-4 text-base font-body text-muted-foreground/90 max-w-lg">
+                We've streamlined the process. Get your business listed in three simple steps designed for busy professionals.
               </p>
-            </motion.div>
-          ))}
-        </div>
+            </div>
 
-        <div className="mt-20 text-center">
-          <Link to="/register">
-            <Button size="lg" className="bg-[#C9973A] hover:bg-[#C9973A]/90 text-white font-sans font-bold px-12 py-8 text-xl rounded-full shadow-2xl transition-all transform hover:scale-105">
-              Start Your Free Registration →
-            </Button>
-          </Link>
-          <p className="mt-4 text-sm text-gray-400 font-sans italic">
-            * ₹150 One-time verification fee applies after step 1
-          </p>
+            <div className="flex flex-col gap-8">
+              {steps.map((s, i) => (
+                <motion.div
+                  key={s.step}
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.15, duration: 0.6 }}
+                  className="relative flex gap-5"
+                >
+                  <div className="shrink-0">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white dark:bg-black shadow-md border border-border/50">
+                      <s.icon className="h-6 w-6 text-primary" />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-3 mb-1">
+                      <span className="text-[10px] font-sans font-bold text-muted-foreground tracking-widest uppercase">Step {s.step}</span>
+                      <div className="h-px w-6 bg-border"></div>
+                    </div>
+                    <h3 className="text-lg font-display font-semibold text-foreground">{s.title}</h3>
+                    <p className="mt-1 text-sm font-body text-muted-foreground leading-relaxed">{s.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="mt-10">
+              <Link
+                to="/register"
+                className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-sans font-medium text-primary-foreground shadow-md hover:bg-primary/90 hover:-translate-y-0.5 transition-all duration-300"
+              >
+                Start Your Application
+              </Link>
+            </div>
+          </div>
+
+          {/* Right Column - Image */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="w-full lg:w-1/2"
+          >
+            <div className="relative rounded-2xl overflow-hidden shadow-xl h-[300px] md:h-[450px]">
+              <img
+                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800"
+                alt="Effortless Onboarding"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent"></div>
+            </div>
+          </motion.div>
+
         </div>
       </div>
     </section>

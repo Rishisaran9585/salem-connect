@@ -1,69 +1,115 @@
-import React, { useState, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { Menu, X, Search, PlusCircle } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 
-const Navbar: React.FC = () => {
-    const [isScrolled, setIsScrolled] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+const navLinks = [
+  { to: "/", label: "Home" },
+  { to: "/categories", label: "Categories" },
+  { to: "/a-z", label: "A-Z Directory" },
+  { to: "/about", label: "About" },
+  { to: "/contact", label: "Contact" },
+];
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+export default function Navbar() {
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
-    return (
-        <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-lg py-2' : 'bg-transparent py-4'}`}>
-            <div className="container mx-auto px-6 flex items-center justify-between">
-                {/* Logo */}
-                <Link to="/" className="flex flex-col items-start">
-                    <span className={`text-2xl font-bold font-['DM_Sans'] transition-colors ${isScrolled ? 'text-[#1B4332]' : 'text-white'}`}>
-                        Salem 
-                        <span className="italic font-['Playfair_Display'] text-[#C9973A] ml-2">Directory</span>
-                    </span>
-                    <span className={`text-[10px] uppercase tracking-widest font-['DM_Mono'] ${isScrolled ? 'text-gray-500' : 'text-white/70'}`}>
-                        salem.idbf.in
-                    </span>
-                </Link>
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-                {/* Desktop Nav */}
-                <div className="hidden lg:flex items-center space-x-10">
-                    <NavLink to="/" className={({isActive}) => `nav-link ${isActive ? 'text-[#C9973A]' : (isScrolled ? 'text-[#1A1A2E]' : 'text-white')}`}>Home</NavLink>
-                    <NavLink to="/categories" className={({isActive}) => `nav-link ${isActive ? 'text-[#C9973A]' : (isScrolled ? 'text-[#1A1A2E]' : 'text-white')}`}>Categories</NavLink>
-                    <NavLink to="/a-z" className={({isActive}) => `nav-link ${isActive ? 'text-[#C9973A]' : (isScrolled ? 'text-[#1A1A2E]' : 'text-white')}`}>A-Z List</NavLink>
-                    <NavLink to="/about" className={({isActive}) => `nav-link ${isActive ? 'text-[#C9973A]' : (isScrolled ? 'text-[#1A1A2E]' : 'text-white')}`}>About</NavLink>
-                    <NavLink to="/contact" className={({isActive}) => `nav-link ${isActive ? 'text-[#C9973A]' : (isScrolled ? 'text-[#1A1A2E]' : 'text-white')}`}>Contact</NavLink>
-                </div>
+  return (
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'glass-effect py-3' : 'bg-transparent py-5'}`}>
+      <div className="container mx-auto flex items-center justify-between px-4">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-1 group">
+          <span className={`text-2xl font-display font-bold tracking-tight transition-colors duration-500 ${scrolled ? 'text-[#1B4332]' : 'text-white'}`}>Salem</span>
+          <span className={`text-2xl font-display font-light transition-colors duration-500 ${scrolled ? 'text-[#C9973A]' : 'text-[#C9973A]'}`}>Connect</span>
+        </Link>
 
-                {/* Action Button */}
-                <div className="hidden lg:block">
-                    <Link to="/register" className="btn-gold flex items-center gap-2">
-                        <PlusCircle size={20} />
-                        Register Your Business
-                    </Link>
-                </div>
-
-                {/* Mobile Toggle */}
-                <button className="lg:hidden p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                    {isMenuOpen ? <X size={28} className={isScrolled ? 'text-black' : 'text-white'} /> : <Menu size={28} className={isScrolled ? 'text-black' : 'text-white'} />}
-                </button>
-            </div>
-
-            {/* Mobile Menu */}
-            {isMenuOpen && (
-                <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-2xl py-6 px-10 animate-fade-in-down border-t">
-                    <div className="flex flex-col space-y-6">
-                        <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-xl font-['DM_Sans']">Home</Link>
-                        <Link to="/categories" onClick={() => setIsMenuOpen(false)} className="text-xl font-['DM_Sans']">Categories</Link>
-                        <Link to="/a-z" onClick={() => setIsMenuOpen(false)} className="text-xl font-['DM_Sans']">A-Z List</Link>
-                        <Link to="/register" onClick={() => setIsMenuOpen(false)} className="text-xl font-bold text-[#C9973A]">Register Free</Link>
-                    </div>
-                </div>
-            )}
+        {/* Desktop Nav */}
+        <nav className="hidden items-center gap-2 md:flex">
+          <div className={`flex items-center gap-1 rounded-full px-2.5 py-1.5 shadow-sm border transition-all duration-500 ${
+            scrolled 
+            ? 'bg-white/80 dark:bg-black/80 backdrop-blur-md border-gray-100' 
+            : 'bg-white/10 backdrop-blur-sm border-white/20'
+          }`}>
+            {navLinks.map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                className={`rounded-full px-5 py-2 text-sm font-sans font-bold tracking-tight transition-all duration-300 ${
+                  location.pathname === l.to
+                  ? scrolled ? "bg-[#1B4332] text-white shadow-lg" : "bg-[#C9973A] text-white shadow-lg"
+                  : scrolled ? "text-[#4B5563] hover:text-[#1B4332]" : "text-white/90 hover:text-white"
+                }`}
+              >
+                {l.label}
+              </Link>
+            ))}
+          </div>
         </nav>
-    );
-};
 
-export default Navbar;
+        {/* CTA */}
+        <div className="hidden md:block">
+          <Link to="/register">
+            <Button className={`rounded-full font-sans font-bold shadow-elevated hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-500 px-8 py-6 h-auto border-none ${
+              scrolled ? 'bg-[#1B4332] text-white' : 'bg-[#C9973A] text-white'
+            }`}>
+              <Plus className="mr-2 h-5 w-5" /> Register Business
+            </Button>
+          </Link>
+        </div>
+
+        {/* Mobile toggle */}
+        <button
+          className="md:hidden p-2 rounded-full bg-white/50 backdrop-blur-md border border-border/50 text-foreground"
+          onClick={() => setOpen(!open)}
+          aria-label="Toggle menu"
+        >
+          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden border-t border-border/50 md:hidden glass-effect absolute w-full top-full"
+          >
+            <nav className="flex flex-col gap-1 p-6">
+              {navLinks.map((l) => (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  onClick={() => setOpen(false)}
+                  className={`rounded-xl px-4 py-3 text-base font-sans font-medium transition-colors ${location.pathname === l.to
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-muted-foreground hover:bg-secondary"
+                    }`}
+                >
+                  {l.label}
+                </Link>
+              ))}
+              <Link to="/register" onClick={() => setOpen(false)} className="mt-4">
+                <Button className="w-full rounded-xl bg-primary font-sans text-primary-foreground py-6 text-base">
+                  <Plus className="mr-2 h-5 w-5" /> Register Business
+                </Button>
+              </Link>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
+  );
+}

@@ -1,218 +1,310 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { 
-  MapPin, Phone, Mail, Globe, ShieldCheck, 
-  Share2, ArrowLeft, ChevronRight, LayoutGrid, 
-  Star, Clock, Heart, Award, CheckCircle2 
+import {
+   MapPin, Phone, Mail, Globe, ShieldCheck,
+   Share2, ChevronRight, Award, CheckCircle2,
+   Clock, AlertTriangle, ArrowLeft, Star
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import axios from "axios";
-import { motion } from "framer-motion";
+import { sampleBusinesses, allCategories } from "@/data/categories";
+
+interface Business {
+   id: number;
+   slug: string;
+   business_name: string;
+   owner_name: string;
+   category_name: string;
+   category_slug: string;
+   description: string;
+   address: string;
+   area: string;
+   city: string;
+   state: string;
+   pincode: string;
+   mobile: string;
+   email?: string;
+   website?: string;
+   verified: boolean;
+   logo_url?: string;
+}
 
 export default function BusinessDetail() {
-  const { slug } = useParams();
-  const [business, setBusiness] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+   const { slug } = useParams();
+   const [business, setBusiness] = useState<Business | null>(null);
+   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchBusiness = async () => {
-      try {
-        const res = await axios.get(`http://localhost/salem-connect/backend/api/v1/businesses.php?slug=${slug}`);
-        if (res.data.success) {
-          setBusiness(res.data.data);
-        }
-      } catch (err) {
-        console.error("Fetch failed");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchBusiness();
-    window.scrollTo(0, 0);
-  }, [slug]);
+   useEffect(() => {
+      const fetchBusiness = async () => {
+         try {
+            const res = await axios.get(`/backend/api/v1/businesses.php?slug=${slug}`);
+            if (res.data.success && res.data.data) {
+               setBusiness(res.data.data);
+               setLoading(false);
+               return;
+            }
+         } catch (err) {
+            console.error("Fetch failed, looking for local sample data...");
+         }
 
-  if (loading) return <div className="p-20 text-center animate-pulse">Gathering business details...</div>;
-  if (!business) return <div className="p-20 text-center">Business not found.</div>;
+         // Search in local sample data if API fails or returns no success
+         const localBiz = sampleBusinesses.find(b => b.slug === slug);
+         if (localBiz) {
+            const category = allCategories.find(c => c.id === localBiz.categoryId);
+            setBusiness({
+               id: localBiz.id,
+               slug: localBiz.slug,
+               business_name: localBiz.businessName,
+               owner_name: localBiz.ownerName,
+               category_name: localBiz.categoryName,
+               category_slug: category?.slug || localBiz.categoryName.toLowerCase().replace(/ /g, '-'),
+               description: localBiz.description,
+               address: localBiz.address,
+               area: localBiz.area,
+               city: localBiz.city,
+               state: localBiz.state,
+               pincode: localBiz.pincode,
+               mobile: localBiz.mobile,
+               email: localBiz.email,
+               website: localBiz.website,
+               verified: localBiz.verified
+            });
+         }
+         
+         setLoading(false);
+      };
+      
+      setLoading(true);
+      fetchBusiness();
+      window.scrollTo(0, 0);
+   }, [slug]);
 
-  return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <Navbar />
+   if (loading) {
+      return (
+         <div className="min-h-screen bg-white flex flex-col items-center justify-center space-y-6">
+            <div className="w-16 h-16 border-4 border-[#C9973A] border-t-transparent rounded-full animate-spin" />
+            <p className="font-display font-bold text-[#1B4332] text-xl animate-pulse uppercase tracking-widest">Gathering details...</p>
+         </div>
+      );
+   }
 
-      <main className="grow container mx-auto px-4 py-32 space-y-12">
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-3 text-sm font-sans font-bold text-gray-400 uppercase tracking-widest pl-4">
-           <Link to="/" className="hover:text-[#1B4332] transition-colors">Home</Link>
-           <ChevronRight size={14} />
-           <Link to={`/category/${business.category_slug}`} className="hover:text-[#C9973A] transition-colors">{business.category_name}</Link>
-           <ChevronRight size={14} />
-           <span className="text-[#1B4332]">{business.business_name}</span>
-        </div>
+   if (!business) {
+      return (
+         <div className="min-h-screen bg-gray-50">
+            <Navbar />
+            <main className="container mx-auto px-4 py-40 text-center">
+               <div className="max-w-md mx-auto space-y-10">
+                  <div className="w-24 h-24 bg-red-50 text-red-400 rounded-full flex items-center justify-center mx-auto shadow-inner">
+                     <AlertTriangle size={48} />
+                  </div>
+                  <div>
+                     <h2 className="text-3xl font-display font-bold text-[#1B4332]">Business Listing Missing</h2>
+                     <p className="text-gray-400 mt-4 font-sans leading-relaxed">
+                        We couldn't find the business you're looking for. It might have been relocated or the link is incorrect.
+                     </p>
+                  </div>
+                  <div className="flex flex-col gap-4">
+                     <Link to="/a-z">
+                        <Button className="w-full bg-[#1B4332] rounded-2xl py-8 h-auto font-bold text-lg border-none shadow-xl">
+                           Browse A-Z Directory
+                        </Button>
+                     </Link>
+                     <Link to="/">
+                        <Button variant="ghost" className="w-full text-[#1B4332] font-bold py-4 h-auto flex items-center justify-center gap-2">
+                           <ArrowLeft size={18} /> Back to Home
+                        </Button>
+                     </Link>
+                  </div>
+               </div>
+            </main>
+            <Footer />
+         </div>
+      );
+   }
 
-        {/* Hero Header Section */}
-        <div className="bg-white rounded-[3rem] p-10 lg:p-20 shadow-2xl border border-gray-100 relative overflow-hidden">
-           <div className="absolute top-0 right-0 h-full w-1/3 bg-[#C9973A]/5 -skew-x-12 translate-x-1/2 rounded-full pointer-events-none" />
-           
-           <div className="flex flex-col lg:flex-row items-center lg:items-start gap-12 relative z-10">
-              {/* Logo / Initial Plate */}
-              <div className="w-32 h-32 lg:w-48 lg:h-48 bg-gray-50 rounded-[2.5rem] shadow-xl border border-gray-100 flex items-center justify-center text-[#C9973A] text-5xl lg:text-7xl font-display font-bold shrink-0 relative">
-                 {business.logo_url ? <img src={business.logo_url} className="w-full h-full object-contain rounded-[2.5rem]" /> : business.business_name[0]}
-                 <div className="absolute -bottom-4 -right-4 bg-white p-3 rounded-full shadow-lg border border-gray-50">
-                    <ShieldCheck className="w-8 h-8 text-[#22C55E]" />
-                 </div>
-              </div>
+   return (
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+         <Navbar />
+         <main className="flex-grow">
+            <div className="bg-[#1B4332] pt-32 pb-12 md:pt-40 md:pb-24 relative overflow-hidden">
+               <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#C9973A]/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3" />
+               <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-white/5 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/4" />
+               
+               <div className="container mx-auto px-4 relative z-10">
+                  <div className="flex items-center gap-2 text-[10px] font-sans text-white/80 mb-10 uppercase tracking-[0.2em] font-black">
+                     <Link to="/" className="hover:text-[#C9973A] transition-colors">Salem Connect</Link>
+                     <ChevronRight className="h-3 w-3 text-[#C9973A]" />
+                     <Link to={`/category/${business.category_slug}`} className="hover:text-[#C9973A] transition-colors">
+                        {business.category_name}
+                     </Link>
+                     <ChevronRight className="h-3 w-3 text-[#C9973A]" />
+                     <span className="text-white drop-shadow-sm">{business.business_name}</span>
+                  </div>
+                  
+                  <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
+                     <div className="space-y-6">
+                        <div className="flex flex-wrap items-center gap-4">
+                           <h1 className="text-4xl md:text-6xl font-display font-bold text-white tracking-tight">
+                              {business.business_name}
+                           </h1>
+                           {business.verified && (
+                              <div className="flex items-center gap-2 rounded-full bg-[#22C55E]/20 px-4 py-1.5 text-[10px] font-bold text-[#22C55E] uppercase tracking-widest border border-[#22C55E]/30">
+                                 <CheckCircle2 className="h-4 w-4" /> Verified Business
+                              </div>
+                           )}
+                        </div>
+                        <div className="flex items-center gap-6">
+                           <span className="px-5 py-2 bg-[#C9973A] text-white text-xs font-bold uppercase tracking-widest rounded-full shadow-lg">
+                              {business.category_name}
+                           </span>
+                            <div className="flex items-center gap-1 text-[#C9973A]">
+                               {[1, 2, 3, 4, 5].map(i => <Star key={i} fill="currentColor" size={14} />)}
+                               <span className="text-white/90 text-xs font-black ml-3 uppercase tracking-widest drop-shadow-sm">4.8 <span className="text-white/60 font-sans ml-1 text-[10px]">(85 Verified Reviews)</span></span>
+                            </div>
+                        </div>
+                     </div>
+                     
+                     <div className="flex flex-wrap gap-4">
+                        <a href={`tel:${business.mobile}`} className="w-full sm:w-auto">
+                           <Button className="w-full bg-white hover:bg-white/90 text-[#1B4332] rounded-2xl px-10 py-8 h-auto font-bold font-sans shadow-2xl text-lg border-none transform active:scale-95 transition-all">
+                              <Phone className="mr-3 w-6 h-6" /> {business.mobile}
+                           </Button>
+                        </a>
+                     </div>
+                  </div>
+               </div>
+            </div>
 
-              <div className="text-center lg:text-left space-y-4">
-                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
-                    <h1 className="text-4xl md:text-5xl font-display font-bold text-[#1B4332]">{business.business_name}</h1>
-                    <span className="px-4 py-1 bg-[#22C55E]/10 text-[#22C55E] text-[10px] font-bold uppercase tracking-widest rounded-full border border-[#22C55E]/20">
-                      Verified Business
-                    </span>
-                 </div>
-                 <p className="text-xl text-[#C9973A] font-sans font-bold uppercase tracking-widest">{business.category_name}</p>
-                 <div className="flex flex-wrap justify-center lg:justify-start gap-6 mt-6">
-                    <div className="flex items-center gap-2 text-gray-500 font-sans font-bold text-sm">
-                       <MapPin size={18} className="text-[#1B4332]/40" />
-                       {business.area}, Salem
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-500 font-sans font-bold text-sm">
-                       <Clock size={18} className="text-[#1B4332]/40" />
-                       Mon - Sat (9:00 AM - 8:00 PM)
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-500 font-sans font-bold text-sm">
-                       <Award size={18} className="text-[#1B4332]/40" />
-                       Joined 2024
-                    </div>
-                 </div>
-              </div>
+            <div className="container mx-auto px-4 -mt-12 mb-20 space-y-12 relative z-20">
+               {/* Main Profile Card */}
+               <div className="bg-white rounded-[3.5rem] p-10 lg:p-16 shadow-2xl border border-gray-100 flex flex-col lg:flex-row gap-16 relative group">
+                  <div className="absolute top-0 right-0 h-4 bg-[#C9973A] w-1/4 rounded-full -translate-y-2 group-hover:w-1/2 transition-all duration-700" />
+                  
+                  {/* Photo / Logo Area */}
+                  <div className="lg:w-1/3 space-y-8">
+                     <div className="aspect-square bg-gray-50 rounded-[3rem] shadow-xl border border-gray-100 flex items-center justify-center text-[#C9973A] text-8xl md:text-9xl font-display font-bold relative overflow-hidden group/img">
+                        {business.logo_url ? <img src={business.logo_url} className="w-full h-full object-cover" /> : (business.business_name ? business.business_name[0] : "?")}
+                        <div className="absolute inset-0 bg-[#1B4332]/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                           <Button variant="ghost" className="text-white border border-white/20 rounded-full font-bold">View Gallery</Button>
+                        </div>
+                     </div>
+                     
+                     <div className="grid grid-cols-3 gap-4">
+                        {[1, 2, 3].map(i => (
+                           <div key={i} className="aspect-square bg-gray-100 rounded-2xl flex items-center justify-center text-gray-300">
+                              <Star size={24} />
+                           </div>
+                        ))}
+                     </div>
+                  </div>
 
-              {/* Action Buttons */}
-              <div className="lg:ml-auto flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
-                 <Button className="bg-[#1B4332] hover:bg-[#1B4332]/90 text-white rounded-full px-10 py-8 h-auto font-bold font-sans shadow-xl text-lg min-w-[200px] border-none group transform hover:scale-105 transition-all">
-                    <Phone className="mr-3 w-6 h-6 group-hover:rotate-12 transition-transform" /> Call Now
-                 </Button>
-                 <Button variant="outline" className="border-2 border-gray-100 text-[#1B4332] rounded-full px-10 py-8 h-auto font-bold font-sans hover:bg-gray-50 text-lg shadow-sm transform hover:scale-105 transition-all">
-                    <Share2 className="mr-3 w-6 h-6" /> Share Listing
-                 </Button>
-              </div>
-           </div>
-        </div>
+                  <div className="lg:w-2/3 space-y-12">
+                     <div className="space-y-8">
+                        <h2 className="text-3xl font-display font-bold text-[#1B4332] flex items-center gap-4">
+                           About Our Establishment
+                           <div className="h-1 flex-grow bg-gray-50 rounded-full" />
+                        </h2>
+                         <p className="text-[#1F2937] font-sans text-xl leading-relaxed font-medium">
+                            {business.description || "Leading the way in premium services. We are dedicated to providing the highest quality experience for our customers in the heart of Salem. Visit us today to discover our standard of excellence."}
+                         </p>
+                     </div>
 
-        <div className="grid lg:grid-cols-3 gap-12">
-           {/* Detailed Description */}
-           <div className="lg:col-span-2 space-y-12">
-              <div className="bg-white rounded-[3rem] p-10 lg:p-14 shadow-xl border border-gray-100">
-                 <h2 className="text-3xl font-display font-bold text-[#1B4332] mb-8 pb-4 border-b border-gray-100">About Business</h2>
-                 <p className="text-gray-500 font-body text-xl leading-relaxed whitespace-pre-line italic italic">
-                    {business.description || "The business description is currently being updated. Please check back soon or contact the business directly for more information."}
-                 </p>
-                 
-                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-8 mt-12 bg-gray-50/50 p-10 rounded-[2rem] border border-gray-100">
-                    <div>
-                       <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 font-sans">Business Owner</p>
-                       <p className="font-display font-bold text-[#1B4332]">{business.owner_name || 'Verification Pending'}</p>
-                    </div>
-                    <div>
-                       <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 font-sans">Verified ID</p>
-                       <p className="font-display font-bold text-[#C9973A]">#SALEM-{business.id}002</p>
-                    </div>
-                 </div>
-              </div>
+                     <div className="grid md:grid-cols-2 gap-10">
+                        <div className="p-8 bg-gray-50 rounded-[2.5rem] border border-gray-100 space-y-4">
+                           <h4 className="font-display font-bold text-[#1B4332] text-lg uppercase tracking-wide">Business Information</h4>
+                            <div className="space-y-4">
+                               <div className="flex justify-between items-center py-4 border-b border-gray-200">
+                                  <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-sans">Proprietor Name</span>
+                                  <span className="font-sans font-bold text-[#1B4332] text-lg">{business.owner_name}</span>
+                               </div>
+                               <div className="flex justify-between items-center py-4 border-b border-gray-200">
+                                  <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-sans">Verified ID</span>
+                                  <span className="font-sans font-bold text-[#C9973A] text-lg">#SC-24{business.id}X</span>
+                               </div>
+                               <div className="flex justify-between items-center py-4">
+                                  <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-sans">Market Tenure</span>
+                                  <span className="font-sans font-bold text-[#1B4332] text-lg">8+ Years Active</span>
+                               </div>
+                            </div>
+                        </div>
 
-              {/* Address Map Section Placeholder */}
-              <div className="bg-white rounded-[3rem] p-4 shadow-xl border border-gray-100 h-[400px] overflow-hidden group">
-                 <div className="w-full h-full bg-gray-200 rounded-[2.5rem] relative flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-700">
-                    <MapPin size={80} className="text-[#C9973A]/20" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex flex-col justify-end p-10 text-white">
-                       <p className="font-display font-bold text-2xl">{business.business_name}</p>
-                       <p className="font-sans text-white/70 font-medium">{business.address}</p>
-                       <p className="mt-4 font-bold font-sans uppercase tracking-widest text-xs">Interactive Maps Coming Soon</p>
-                    </div>
-                 </div>
-              </div>
-           </div>
+                        <div className="p-8 bg-[#1B4332] rounded-[2.5rem] text-white space-y-6 shadow-xl relative overflow-hidden">
+                           <div className="absolute top-0 right-0 w-24 h-24 bg-[#C9973A]/20 blur-2xl rounded-full" />
+                           <h4 className="font-display font-bold text-lg uppercase tracking-wide relative z-10">Operating Hours</h4>
+                           <div className="space-y-3 relative z-10">
+                              <div className="flex justify-between text-sm">
+                                 <span className="text-white/40 font-bold uppercase tracking-widest text-[10px]">Monday - Saturday</span>
+                                 <span className="font-sans font-bold">9:00 AM - 9:00 PM</span>
+                              </div>
+                              <div className="flex justify-between text-sm">
+                                 <span className="text-white/40 font-bold uppercase tracking-widest text-[10px]">Sunday</span>
+                                 <span className="font-sans font-bold text-[#C9973A]">Closed</span>
+                              </div>
+                           </div>
+                           <Button className="w-full bg-[#C9973A] border-none font-bold rounded-2xl py-6 hover:bg-white hover:text-[#1B4332] transition-all">Schedule Visit</Button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
 
-           {/* Sidebar: All Contact details */}
-           <div className="space-y-10">
-              <div className="bg-[#1B4332] p-10 lg:p-14 rounded-[3rem] text-white shadow-2xl relative overflow-hidden group">
-                 <div className="absolute top-0 left-0 w-20 h-20 bg-white/10 rounded-full blur-2xl -translate-x-1/2 -translate-y-1/2" />
-                 <h3 className="text-2xl font-display font-bold mb-10 text-white">Contact Info</h3>
-                 
-                 <div className="space-y-8">
-                    <div className="flex gap-6 items-start group/item cursor-pointer">
-                       <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-[#C9973A] group-hover/item:bg-[#C9973A] group-hover/item:text-white transition-all">
-                          <Phone size={24} />
-                       </div>
-                       <div>
-                          <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Mobile & WhatsApp</p>
-                          <p className="text-xl font-display font-bold text-white">{business.mobile}</p>
-                       </div>
-                    </div>
+               <div className="grid lg:grid-cols-12 gap-12">
+                  {/* Address Map Section Placeholder */}
+                  <div className="lg:col-span-12 bg-white rounded-[3.5rem] p-6 shadow-2xl border border-gray-100 h-[500px] overflow-hidden group relative">
+                     <div className="w-full h-full bg-gray-50 rounded-[2.5rem] relative flex items-center justify-center">
+                        <div className="absolute inset-0 bg-[#1B4332]/5 rounded-[2.5rem] animate-pulse" />
+                        <MapPin size={100} className="text-[#C9973A]/20 relative z-10" />
+                        
+                        <div className="absolute bottom-10 left-10 right-10 bg-[#1B4332] p-10 rounded-[2.5rem] text-white flex flex-col md:flex-row justify-between items-center gap-10 shadow-2xl">
+                           <div className="space-y-2">
+                              <p className="text-[10px] font-bold text-[#C9973A] uppercase tracking-widest">Permanent Location</p>
+                              <h4 className="text-2xl font-display font-bold leading-tight">{business.address}</h4>
+                              <p className="text-white/50 text-sm font-sans">{business.area}, {business.city}, {business.state} - {business.pincode}</p>
+                           </div>
+                           <div className="flex gap-4">
+                              <Button className="bg-[#C9973A] border-none font-sans font-bold rounded-2xl px-10 py-6 h-auto shadow-lg hover:scale-105 transition-transform">Get Directions</Button>
+                              <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 rounded-2xl px-10 py-6 h-auto transition-transform">Map View</Button>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
 
-                    <div className="flex gap-6 items-start group/item cursor-pointer">
-                       <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-[#C1973A] group-hover/item:bg-[#C9973A] group-hover/item:text-white transition-all">
-                          <Mail size={24} />
-                       </div>
-                       <div>
-                          <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Business Email</p>
-                          <p className="text-xl font-display font-bold text-white line-clamp-1">{business.email || 'Contact via Phone'}</p>
-                       </div>
-                    </div>
+               {/* Related Businesses */}
+               <div className="py-20">
+                  <div className="flex justify-between items-end mb-16 px-4">
+                     <div>
+                        <h2 className="text-4xl font-display font-bold text-[#1B4332] mb-3">Similar Professionals</h2>
+                        <p className="text-[#C9973A] font-bold font-sans uppercase tracking-[0.3em] text-xs">Based on {business.category_name}</p>
+                     </div>
+                     <Link to={`/category/${business.category_slug}`} className="group bg-white p-4 rounded-full shadow-lg border border-gray-100 flex items-center gap-3 pr-8 hover:bg-[#1B4332] hover:text-white transition-all">
+                        <div className="w-12 h-12 bg-[#C9973A] text-white rounded-full flex items-center justify-center group-hover:rotate-90 transition-transform">
+                           <ChevronRight size={24} />
+                        </div>
+                        <span className="font-sans font-bold">View Category</span>
+                     </Link>
+                  </div>
 
-                    <div className="flex gap-6 items-start group/item cursor-pointer">
-                       <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-[#C1973A] group-hover/item:bg-[#C9973A] group-hover/item:text-white transition-all">
-                          <Globe size={24} />
-                       </div>
-                       <div>
-                          <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-1">Official Website</p>
-                          <p className="text-xl font-display font-bold text-white">{business.website ? business.website.replace('https://', '') : 'No Website'}</p>
-                       </div>
-                    </div>
-                 </div>
-                 
-                 <div className="mt-12 p-8 border border-white/10 rounded-[2rem] bg-white/5 backdrop-blur-sm group-hover:bg-[#C9973A]/10 transition-all transition-all duration-500">
-                    <p className="text-[10px] font-bold text-[#C9973A] uppercase tracking-widest mb-2 font-sans">Business Locality</p>
-                    <p className="text-xl font-display font-bold text-white mb-2">{business.area}</p>
-                    <p className="text-white/60 font-medium text-sm font-sans">{business.city}, {business.state} - {business.pincode}</p>
-                 </div>
-              </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+                     {sampleBusinesses.slice(0, 4).map((item, i) => (
+                        <Link key={i} to={`/business/${item.slug}`} className="group bg-white p-8 rounded-[3rem] shadow-xl border border-gray-100 hover:shadow-2xl hover:-translate-y-3 transition-all duration-500">
+                           <div className="w-20 h-20 bg-gray-50 rounded-[1.5rem] mb-8 flex items-center justify-center text-[#C9973A] text-3xl font-display font-bold shadow-inner group-hover:bg-[#1B4332] group-hover:text-white transition-colors">
+                              {item.businessName[0]}
+                           </div>
+                           <h4 className="text-xl font-display font-bold text-[#1B4332] mb-2">{item.businessName}</h4>
+                           <p className="text-xs font-bold text-[#C9973A] uppercase tracking-widest mb-6">{item.categoryName}</p>
+                           <div className="flex items-center gap-2 text-gray-400 text-[10px] font-bold uppercase tracking-widest">
+                              <MapPin size={12} className="text-[#1B4332]/30" /> {item.area}
+                           </div>
+                        </Link>
+                     ))}
+                  </div>
+               </div>
+            </div>
+         </main>
 
-              {/* Safety Badge */}
-              <div className="p-10 rounded-[3rem] bg-indigo-50 border border-indigo-100 flex items-center gap-6 shadow-sm">
-                 <CheckCircle2 size={40} className="text-indigo-600 shrink-0" />
-                 <div>
-                    <h4 className="font-bold font-sans text-indigo-900 uppercase tracking-widest text-xs">Verified by Directory</h4>
-                    <p className="text-indigo-900/60 font-sans text-xs mt-1">Details updated 2024</p>
-                 </div>
-              </div>
-           </div>
-        </div>
-
-        {/* Related Businesses (Placeholder Section) */}
-        <div className="py-10">
-           <div className="flex justify-between items-center mb-10 pl-4 border-l-4 border-[#C9973A]">
-              <h2 className="text-3xl font-display font-bold text-[#1B4332]">Related Businesses</h2>
-              <Link to={`/category/${business.category_slug}`} className="text-[#C9973A] font-bold font-sans flex items-center gap-2 hover:translate-x-2 transition-transform">
-                View All {business.category_name} <ChevronRight size={20} />
-              </Link>
-           </div>
-           
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="bg-white p-8 rounded-[2.5rem] shadow-lg border border-gray-100 hover:-translate-y-2 transition-transform grayscale opacity-40 hover:grayscale-0 hover:opacity-100">
-                   <div className="w-16 h-16 bg-gray-50 rounded-2xl mb-6 flex items-center justify-center text-gray-300">
-                      <ShieldCheck size={32} />
-                   </div>
-                   <div className="h-4 bg-gray-100 rounded-full w-3/4 mb-4"></div>
-                   <div className="h-3 bg-gray-50 rounded-full w-1/2"></div>
-                </div>
-              ))}
-           </div>
-        </div>
-      </main>
-
-      <Footer />
-    </div>
-  );
+         <Footer />
+      </div>
+   );
 }

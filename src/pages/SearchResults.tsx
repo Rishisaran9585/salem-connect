@@ -20,7 +20,7 @@ export default function SearchResults() {
     <div className="min-h-screen bg-background">
       <Navbar />
       <main>
-        <div className="bg-gradient-hero py-10">
+        <div className="bg-gradient-hero pt-32 pb-12 md:pt-40 md:pb-16">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-2xl font-display font-bold text-primary-foreground">
               Search Results for "{query}"
