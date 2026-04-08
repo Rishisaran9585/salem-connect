@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, PlayCircle, ChevronRight, ChevronLeft } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -12,29 +12,14 @@ interface Slide {
 }
 
 const defaultSlides: Slide[] = [
-  { id: 101, image_url: "/salem-city-view.png" },
-  { id: 102, image_url: "/yercaud-ghat-road.png" },
-  { id: 103, image_url: "/salem-hero-1.png" },
+  { id: 1, image_url: "/hero-1.png", title: "Salem Business Directory", subtitle: "Connecting Commerce & Culture" },
+  { id: 2, image_url: "/hero-2.png", title: "Premium Connect", subtitle: "The Elite Business Network" },
+  { id: 3, image_url: "/hero-3.png", title: "Discover Local", subtitle: "Heritage & Commerce" },
 ];
 
 export default function HeroCarousel() {
-  const [slides, setSlides] = useState<Slide[]>(defaultSlides);
+  const [slides] = useState<Slide[]>(defaultSlides);
   const [current, setCurrent] = useState(0);
-
-  useEffect(() => {
-    const fetchSlides = async () => {
-      try {
-        const response = await fetch("/backend/api/v1/hero.php");
-        const data = await response.json();
-        if (data.success && data.data.length > 0) {
-          setSlides(data.data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch slides:", error);
-      }
-    };
-    fetchSlides();
-  }, []);
 
   useEffect(() => {
     if (slides.length <= 1) return;
@@ -48,14 +33,14 @@ export default function HeroCarousel() {
   const prev = () => setCurrent((c) => (c - 1 + slides.length) % slides.length);
 
   return (
-    <section className="relative w-full bg-black overflow-hidden">
-      {/* Fixed aspect ratio container for carousel */}
-      <div className="relative w-full" style={{ aspectRatio: "16 / 9", minHeight: "400px", maxHeight: "100vh" }}>
+    <section className="relative w-full aspect-video min-h-[450px] bg-black overflow-hidden">
+      {/* Container for carousel */}
+      <div className="relative w-full h-full">
         {/* Carousel Backgrounds */}
         <AnimatePresence initial={false}>
           <motion.div
             key={current}
-            initial={{ opacity: 0, scale: 1.05 }}
+            initial={{ opacity: 0, scale: 1.1 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1.5, ease: "easeInOut" }}
@@ -66,33 +51,14 @@ export default function HeroCarousel() {
               alt="Salem Business Directory"
               className="w-full h-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/20 to-black/90 backdrop-blur-[1px]"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/30 to-black/90 backdrop-blur-[0.5px]"></div>
           </motion.div>
         </AnimatePresence>
 
-        {/* Content Overlay */}
-        <div className="absolute inset-0 container mx-auto px-4 flex items-center justify-center">
-          {/* Sleek Minimalist Typography */}
-          <motion.div
-             key={slides[current].id + "-text"}
-             initial={{ y: 20, opacity: 0 }}
-             animate={{ y: 0, opacity: 1 }}
-             transition={{ delay: 0.2, duration: 1 }}
-             className="relative text-center"
-          >
-            <span className="mb-4 block text-[10px] md:text-[0.6rem] font-sans font-black uppercase tracking-[0.5em] text-white/90 drop-shadow-md">
-              {slides[current].subtitle || "The Elite Business Network"}
-            </span>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-black leading-tight text-white tracking-tighter drop-shadow-2xl">
-              {slides[current].title || "Discover Salem"}
-            </h1>
-            <p className="mt-6 text-base md:text-lg text-white/80 font-sans font-medium tracking-wide max-w-xl mx-auto drop-shadow-lg">
-              Connecting commerce, culture, and community in the heart of Tamil Nadu.
-            </p>
-          </motion.div>
-        </div>
+        {/* Content Overlay removed as requested */}
+      </div>
 
-        {/* Carousel Controls - positioned at bottom */}
+      {/* Carousel Controls - positioned at bottom */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-6 z-20">
           <button onClick={prev} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/20 text-white/50 backdrop-blur-md transition-all hover:bg-white/10 hover:text-white">
             <ChevronLeft className="h-5 w-5" />
@@ -111,7 +77,6 @@ export default function HeroCarousel() {
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
-      </div>
     </section>
   );
 }

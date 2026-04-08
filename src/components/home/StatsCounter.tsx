@@ -3,10 +3,10 @@ import { useRef, useState, useEffect } from "react";
 import { Building2, FolderOpen, MapPin, Star } from "lucide-react";
 
 const stats = [
-  { icon: Building2, value: 5000, suffix: "+", label: "Elite Businesses" },
-  { icon: FolderOpen, value: 300, suffix: "+", label: "Categories" },
-  { icon: MapPin, value: 200, suffix: "+", label: "Areas Covered" },
-  { icon: Star, value: 100, suffix: "%", label: "Verified listings" },
+  { icon: Building2, value: 500, suffix: "+", label: "Registered Businesses" },
+  { icon: FolderOpen, value: 316, suffix: "+", label: "Categories" },
+  { icon: MapPin, value: 100, suffix: "+", label: "Salem Areas" },
+  { icon: Star, value: 8, suffix: "+", label: "Years of Excellence" },
 ];
 
 interface CounterProps {

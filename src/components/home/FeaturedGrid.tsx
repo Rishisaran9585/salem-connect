@@ -1,25 +1,13 @@
-import { 
-  Car, GraduationCap, Utensils, HeartPulse, Cpu, 
-  Landmark, ShoppingBag, Briefcase, HardHat, 
-  Shirt, PartyPopper, Laptop 
-} from "lucide-react";
+import { featuredCategories } from "@/data/categories";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
-const categories = [
-  { name: "Automotive", icon: Car, count: "450+", slug: "automotive", color: "bg-blue-500" },
-  { name: "Education", icon: GraduationCap, count: "320+", slug: "education", color: "bg-emerald-500" },
-  { name: "Food & Drinks", icon: Utensils, count: "580+", slug: "food-and-beverages", color: "bg-orange-500" },
-  { name: "Health", icon: HeartPulse, count: "210+", slug: "health-and-medical", color: "bg-rose-500" },
-  { name: "Electronics", icon: Cpu, count: "150+", slug: "electronics-and-tech", color: "bg-indigo-500" },
-  { name: "Finance", icon: Landmark, count: "180+", slug: "finance-and-banking", color: "bg-cyan-500" },
-  { name: "Retail Stores", icon: ShoppingBag, count: "900+", slug: "retail-and-general-stores", color: "bg-pink-500" },
-  { name: "Business", icon: Briefcase, count: "240+", slug: "professional-services", color: "bg-slate-600" },
-  { name: "Construction", icon: HardHat, count: "110+", slug: "construction", color: "bg-amber-600" },
-  { name: "Fashion", icon: Shirt, count: "340+", slug: "clothing-and-fashion", color: "bg-purple-500" },
-  { name: "Events", icon: PartyPopper, count: "95+", slug: "events-and-entertainment", color: "bg-fuchsia-500" },
-  { name: "Technology", icon: Laptop, count: "135+", slug: "technology", color: "bg-sky-600" },
-];
+const categories = featuredCategories.map(cat => ({
+  ...cat,
+  count: "0+", // Reflecting reset state
+  color: cat.id % 2 === 0 ? "bg-[#C9973A]" : "bg-[#1B4332]" // Using brand colors
+}));
 
 const container = {
   hidden: { opacity: 0 },

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
    MapPin, Phone, Mail, Globe, ShieldCheck,
@@ -106,9 +106,9 @@ export default function BusinessDetail() {
                      </p>
                   </div>
                   <div className="flex flex-col gap-4">
-                     <Link to="/a-z">
+                     <Link to="/categories">
                         <Button className="w-full bg-[#1B4332] rounded-2xl py-8 h-auto font-bold text-lg border-none shadow-xl">
-                           Browse A-Z Directory
+                           Browse All Categories
                         </Button>
                      </Link>
                      <Link to="/">
@@ -225,7 +225,7 @@ export default function BusinessDetail() {
                                </div>
                                <div className="flex justify-between items-center py-4">
                                   <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-sans">Market Tenure</span>
-                                  <span className="font-sans font-bold text-[#1B4332] text-lg">8+ Years Active</span>
+                                  <span className="font-sans font-bold text-[#1B4332] text-lg">8+ Years of Excellence</span>
                                </div>
                             </div>
                         </div>

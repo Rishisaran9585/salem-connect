@@ -7,16 +7,15 @@ import { componentTagger } from "lovable-tagger";
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
-    port: 8080,
+    port: 8081,
     hmr: {
       overlay: false,
     },
     proxy: {
       '/backend': {
-        target: 'https://maroon-finch-443423.hostingersite.com',
+        target: 'http://localhost/salem-connect',
         changeOrigin: true,
-        rewrite: (path: string) => '/backend' + path,
-        secure: true,
+        secure: false,
       }
     }
   },

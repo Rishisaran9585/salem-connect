@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 const navLinks = [
   { to: "/", label: "Home" },
   { to: "/categories", label: "Categories" },
-  { to: "/a-z", label: "A-Z Directory" },
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
 ];
@@ -31,7 +30,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-1 group">
           <span className={`text-2xl font-display font-bold tracking-tight transition-colors duration-500 ${scrolled ? 'text-[#1B4332]' : 'text-white'}`}>Salem</span>
-          <span className={`text-2xl font-display font-light transition-colors duration-500 ${scrolled ? 'text-[#C9973A]' : 'text-[#C9973A]'}`}>Connect</span>
+          <span className={`text-2xl font-display font-light transition-colors duration-500 ${scrolled ? 'text-[#C9973A]' : 'text-[#C9973A]'}`}>Business</span>
         </Link>
 
         {/* Desktop Nav */}

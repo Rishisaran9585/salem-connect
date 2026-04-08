@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import {
    Mail, Phone, MapPin, MessageSquare,
    Send, ShieldCheck, User, Building, ArrowRight,
@@ -79,14 +79,14 @@ export default function Contact() {
                         
                         <div className="space-y-12">
                            <div className="flex gap-6 group/item">
-                              <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-[#1B4332] group-hover/item:bg-[#C9973A] group-hover/item:text-white transition-all shrink-0 shadow-sm">
-                                 <Headset size={24} />
-                              </div>
-                              <div>
-                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 font-sans">Call Our Helpline</p>
-                                 <p className="text-xl font-display font-bold text-[#1B4332]">+91 427 2341234</p>
-                                 <p className="text-xs font-bold text-[#C9973A] uppercase mt-1">Available 10AM - 6PM</p>
-                              </div>
+                               <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-[#1B4332] group-hover/item:bg-[#C9973A] group-hover/item:text-white transition-all shrink-0 shadow-sm">
+                                  <Phone size={24} />
+                               </div>
+                               <div>
+                                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 font-sans">WhatsApp Support</p>
+                                  <p className="text-xl font-display font-bold text-[#1B4332]">+91 96550 30405</p>
+                                  <p className="text-xs font-bold text-[#C9973A] uppercase mt-1">Chat 10AM - 10PM</p>
+                               </div>
                            </div>
 
                            <div className="flex gap-6 group/item">

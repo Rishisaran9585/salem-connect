@@ -9,8 +9,6 @@ import NotFound from "./pages/NotFound";
 import Categories from "./pages/Categories";
 import CategoryPage from "./pages/CategoryPage";
 import BusinessDetail from "./pages/BusinessDetail";
-import AtoZ from "./pages/AtoZ";
-import CategoriesAtoZ from "./pages/CategoriesAtoZ";
 import Register from "./pages/Register";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
@@ -34,15 +32,14 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/category/:slug" element={<CategoryPage />} />
           <Route path="/business/:slug" element={<BusinessDetail />} />
-          <Route path="/a-z" element={<AtoZ />} />
-          <Route path="/a-z-categories" element={<CategoriesAtoZ />} />
+
           <Route path="/register" element={<Register />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />

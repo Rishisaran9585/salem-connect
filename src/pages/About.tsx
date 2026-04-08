@@ -10,10 +10,10 @@ import Footer from "@/components/layout/Footer";
 import { Link } from "react-router-dom";
 
 const stats = [
-  { label: "Verified Businesses", value: "5,000+", icon: ShieldCheck },
-  { label: "Active Categories", value: "300+", icon: TrendingUp },
-  { label: "Daily Visitors", value: "10,000+", icon: Users },
-  { label: "Local Areas", value: "50+", icon: MapPin }
+  { label: "Verified Businesses", value: "500+", icon: ShieldCheck },
+  { label: "Active Categories", value: "316+", icon: TrendingUp },
+  { label: "Daily Visitors", value: "1,000+", icon: Users },
+  { label: "Local Areas", value: "100+", icon: MapPin }
 ];
 
 const coreValues = [
