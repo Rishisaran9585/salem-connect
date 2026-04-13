@@ -1,10 +1,13 @@
 <?php
 // backend/config/config.php
-
 define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'salem_directory');
+define('DB_USER', 'u891495087_salem');
+define('DB_PASS', 'Hym8OevP|1w');
+define('DB_NAME', 'u891495087_salem');
+// define('DB_HOST', 'localhost');
+// define('DB_USER', 'root');
+// define('DB_PASS', '');
+// define('DB_NAME', 'salem_connect');
 
 define('JWT_SECRET', 'salem_secret_key_2024_!@#');
 define('JWT_EXPIRY', 86400); // 24 hours

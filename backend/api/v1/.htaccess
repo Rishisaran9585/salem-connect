@@ -1,18 +1,24 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    CGIPassAuth On
     RewriteBase /backend/api/v1/
-    
+
+    # Direct rewrite to ensure Authorization header is preserved for PHP
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Fallback for some systems
+    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+
     # Don't rewrite actual files or directories
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    
-    # Allow Authorization header
-    RewriteCond %{REQUEST_FILENAME} \.php$ [OR]
-    RewriteCond %{REQUEST_METHOD} ^(POST|PUT|DELETE)$
-    RewriteRule ^ - [L]
+    RewriteRule . - [L]
 </IfModule>
 
-# Pass Authorization header through
+# Handle Authorization header for PHP scripts
 <IfModule mod_headers.c>
-    SetEnvIf Authorization ^(.*)$ HTTP_AUTHORIZATION=$1
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
 </IfModule>

@@ -38,7 +38,7 @@ export default function About() {
         {/* Cinematic Hero */}
         <section className="bg-gradient-hero pt-24 pb-24 md:pt-32 md:pb-32 relative overflow-hidden">
           {/* Decorative background elements */}
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#C9973A]/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/4" />
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/4" />
           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-white/5 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/3" />
 
           <div className="container mx-auto px-4 text-center relative z-10">
@@ -48,7 +48,7 @@ export default function About() {
               transition={{ duration: 0.6 }}
               className="inline-block"
             >
-              <span className="bg-white/10 backdrop-blur-md border border-white/20 px-6 py-2 rounded-full text-[#C9973A] font-sans font-black uppercase tracking-[0.3em] text-[10px] mb-8 block shadow-2xl">
+              <span className="bg-white/10 backdrop-blur-md border border-white/20 px-6 py-2 rounded-full text-indigo-400 font-sans font-black uppercase tracking-[0.3em] text-[10px] mb-8 block shadow-2xl">
                 The Elite Directory Interface
               </span>
             </motion.div>
@@ -59,7 +59,7 @@ export default function About() {
               transition={{ delay: 0.2, duration: 0.8 }}
               className="text-4xl md:text-7xl font-display font-black text-white mb-8 leading-[1.1] tracking-tighter drop-shadow-2xl"
             >
-              Beyond the <br className="hidden lg:block" /> <span className="text-[#C9973A] italic">Yellow Pages.</span>
+              Beyond the <br className="hidden lg:block" /> <span className="text-indigo-400 italic">Yellow Pages.</span>
             </motion.h1>
             
             <motion.p
@@ -85,10 +85,10 @@ export default function About() {
                 transition={{ delay: idx * 0.1 }}
                 className="text-center group p-6 md:p-8 rounded-[2rem] bg-white border border-gray-100 transition-all duration-500 shadow-xl hover:-translate-y-2"
               >
-                <div className="w-12 h-12 bg-gray-50 rounded-2xl mx-auto flex items-center justify-center text-[#1B4332] mb-6 group-hover:bg-[#C9973A] group-hover:text-white transition-all transform group-hover:rotate-6">
+                <div className="w-12 h-12 bg-gray-50 rounded-2xl mx-auto flex items-center justify-center text-indigo-600 mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-all transform group-hover:rotate-6">
                   <s.icon size={24} />
                 </div>
-                <h3 className="text-2xl font-display font-bold text-[#1B4332] mb-1">{s.value}</h3>
+                <h3 className="text-2xl font-display font-bold text-indigo-600 mb-1">{s.value}</h3>
                 <p className="text-gray-400 font-sans font-black uppercase tracking-[0.2em] text-[8px]">{s.label}</p>
               </motion.div>
             ))}
@@ -104,16 +104,16 @@ export default function About() {
               viewport={{ once: true }}
               className="lg:col-span-5 relative"
             >
-              <div className="absolute -top-10 -left-10 w-48 h-48 bg-[#C9973A]/10 rounded-full blur-[60px]" />
-              <span className="text-[#C9973A] text-[10px] font-black uppercase tracking-[0.3em] mb-3 block">Our Origin Story</span>
-              <h2 className="text-4xl md:text-5xl font-display font-bold text-[#1B4332] mb-6 leading-tight">
+              <div className="absolute -top-10 -left-10 w-48 h-48 bg-indigo-600/10 rounded-full blur-[60px]" />
+              <span className="text-indigo-400 text-[10px] font-black uppercase tracking-[0.3em] mb-3 block">Our Origin Story</span>
+              <h2 className="text-4xl md:text-5xl font-display font-bold text-indigo-600 mb-6 leading-tight">
                 Roots in <span className="italic">Steel</span> & Silk.
               </h2>
               <p className="text-gray-500 text-base font-sans leading-relaxed mb-6">
                 Salem has always been a city of commerce. From the historic weaving sheds of Shevapet to the modern steel plants that define our horizon.
               </p>
-              <p className="text-[#1B4332] text-lg font-display font-bold leading-relaxed border-l-4 border-[#C9973A] pl-6 italic">
-                In 2024, we realized that while Salem's businesses were strong, their digital presence was scattered. Salem Connect was built to unify our local economy.
+              <p className="text-indigo-600 text-lg font-display font-bold leading-relaxed border-l-4 border-indigo-500 pl-6 italic">
+                In 2024, we realized that while Salem's businesses were strong, their digital presence was scattered. Salem Business was built to unify our local economy.
               </p>
             </motion.div>
 
@@ -128,14 +128,14 @@ export default function About() {
                     <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=600" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#1B4332] to-transparent opacity-40"></div>
                  </div>
-                 <div className="bg-[#C9973A] rounded-[2rem] p-6 text-white flex flex-col justify-end aspect-square shadow-lg">
+                 <div className="bg-indigo-600 rounded-[2rem] p-6 text-white flex flex-col justify-end aspect-square shadow-lg">
                     <Star size={32} className="mb-4 animate-pulse" />
                     <h4 className="text-xl font-display font-bold tracking-tight">Salem's First Digital Index.</h4>
                  </div>
               </div>
               <div className="space-y-4">
-                 <div className="bg-[#1B4332] rounded-[2rem] p-8 text-white aspect-square flex flex-col justify-center items-center text-center shadow-lg">
-                    <Landmark size={40} className="text-[#C9973A] mb-4" />
+                 <div className="bg-slate-900 rounded-[2rem] p-8 text-white aspect-square flex flex-col justify-center items-center text-center shadow-lg">
+                    <Landmark size={40} className="text-indigo-400 mb-4" />
                     <p className="font-display font-bold text-base">Honoring 150+ Years of Local Trade</p>
                  </div>
                  <div className="rounded-[2rem] overflow-hidden aspect-[4/6] shadow-xl group relative border-4 border-white">
@@ -148,11 +148,11 @@ export default function About() {
         </section>
 
         {/* Digital Transformation Section */}
-        <section className="bg-[#1B4332] py-20 relative overflow-hidden mt-10">
-           <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-[#C9973A]/20 rounded-full blur-[80px]" />
+        <section className="bg-slate-900 py-20 relative overflow-hidden mt-10">
+           <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-indigo-600/20 rounded-full blur-[80px]" />
            <div className="container mx-auto px-4 relative z-10">
               <div className="text-center mb-16 max-w-2xl mx-auto">
-                 <span className="text-[#C9973A] text-[10px] font-black uppercase tracking-[0.4em] mb-4 block">The Digital Advantage</span>
+                 <span className="text-indigo-400 text-[10px] font-black uppercase tracking-[0.4em] mb-4 block">The Digital Advantage</span>
                  <h2 className="text-4xl font-display font-bold text-white mb-6">Modernizing Marketability.</h2>
                  <p className="text-white/60 font-sans text-base">We provide the technical infrastructure that allows your local business to compete with global brands in search rankings.</p>
               </div>
@@ -164,7 +164,7 @@ export default function About() {
                       whileHover={{ y: -5 }}
                       className="p-8 rounded-[2rem] bg-white/5 border border-white/10 backdrop-blur-xl hover:bg-white/10 transition-all duration-500"
                     >
-                       <div className="w-12 h-12 bg-[#C9973A] rounded-xl flex items-center justify-center text-white mb-6 shadow-lg">
+                       <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-white mb-6 shadow-lg">
                           <value.icon size={24} />
                        </div>
                        <h4 className="text-xl font-display font-bold text-white mb-3 tracking-tight">{value.title}</h4>
@@ -179,20 +179,20 @@ export default function About() {
         <section className="py-20 container mx-auto px-4">
            <div className="flex flex-col lg:flex-row gap-12 items-center">
               <div className="lg:w-1/2">
-                 <h2 className="text-4xl font-display font-bold text-[#1B4332] mb-8 leading-tight">
-                    Our Commitment to the <span className="text-[#C9973A]">Salem Future.</span>
+                 <h2 className="text-4xl font-display font-bold text-indigo-600 mb-8 leading-tight">
+                    Our Commitment to the <span className="text-indigo-400">Salem Future.</span>
                  </h2>
                  <div className="space-y-8">
                    {roadmap.map((item, idx) => (
                       <div key={idx} className="flex gap-6 group">
                          <div className="relative">
-                            <div className="w-16 h-16 rounded-2xl bg-gray-50 flex flex-col items-center justify-center border border-gray-100 group-hover:bg-[#1B4332] transition-colors group-hover:border-[#1B4332]">
-                               <span className="text-[10px] font-bold text-[#C9973A] uppercase tracking-widest">{item.year}</span>
+                            <div className="w-16 h-16 rounded-2xl bg-gray-50 flex flex-col items-center justify-center border border-gray-100 group-hover:bg-slate-900 transition-colors group-hover:border-[#1B4332]">
+                               <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">{item.year}</span>
                             </div>
                             {idx < roadmap.length - 1 && <div className="absolute top-16 left-1/2 -translate-x-1/2 w-px h-8 bg-gray-200" />}
                          </div>
                          <div>
-                            <h4 className="text-xl font-display font-bold text-[#1B4332] mb-1">{item.title}</h4>
+                            <h4 className="text-xl font-display font-bold text-indigo-600 mb-1">{item.title}</h4>
                             <p className="text-gray-500 text-sm font-sans leading-relaxed">{item.desc}</p>
                          </div>
                       </div>
@@ -202,20 +202,20 @@ export default function About() {
 
               <div className="lg:w-1/2 w-full">
                  <div className="relative bg-gray-50 rounded-[3rem] p-10 overflow-hidden shadow-xl group">
-                    <div className="absolute top-[-20%] right-[-10%] w-[200px] h-[200px] bg-[#C9973A]/10 rounded-full blur-[60px]" />
+                    <div className="absolute top-[-20%] right-[-10%] w-[200px] h-[200px] bg-indigo-600/10 rounded-full blur-[60px]" />
                     <div className="relative z-10 space-y-8">
                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-[#1B4332] shadow-lg">
+                          <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-indigo-600 shadow-lg">
                              <Briefcase size={24} />
                           </div>
-                          <h3 className="text-2xl font-display font-bold text-[#1B4332]">Join the 5K+ Network</h3>
+                          <h3 className="text-2xl font-display font-bold text-indigo-600">Join the 5K+ Network</h3>
                        </div>
                        <p className="text-gray-500 text-base leading-relaxed italic">
-                          "Salem Connect isn't just about business listings; it's about building a digital community that feeds back into our local growth."
+                          "Salem Business isn't just about business listings; it's about building a digital community that feeds back into our local growth."
                        </p>
                        <div className="flex gap-4">
                           <Link to="/register" className="w-full">
-                            <Button className="w-full bg-[#1B4332] hover:bg-[#1B4332]/90 rounded-[1rem] py-6 h-auto shadow-xl text-base font-sans font-black flex items-center justify-center gap-3 border-none group">
+                            <Button className="w-full bg-slate-900 hover:bg-slate-900/90 rounded-[1rem] py-6 h-auto shadow-xl text-base font-sans font-black flex items-center justify-center gap-3 border-none group">
                                List Your Enterprise <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
                             </Button>
                           </Link>
@@ -228,13 +228,13 @@ export default function About() {
 
         {/* Call to Action Final */}
         <section className="container mx-auto px-4 mb-20 text-center">
-          <div className="bg-gradient-gold p-12 md:p-20 rounded-[3.5rem] text-white overflow-hidden relative shadow-xl group">
+          <div className="bg-gradient-accent p-12 md:p-20 rounded-[3.5rem] text-white overflow-hidden relative shadow-xl group">
             <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-white/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 group-hover:scale-125 transition-transform duration-1000" />
             <h2 className="text-4xl md:text-6xl font-display font-black mb-6 relative z-10 tracking-tighter leading-[1]">Be Part of Salem's <br /> #1 Network</h2>
             <p className="text-white/80 font-sans text-base md:text-lg mb-10 relative z-10 max-w-2xl mx-auto font-medium">Verify your business today for a one-time fee of ₹150 and secure your position in the local digital hierarchy.</p>
             <div className="flex flex-col md:flex-row items-center justify-center gap-6 relative z-10">
               <Link to="/register">
-                <button className="bg-[#1B4332] hover:bg-[#1B4332]/90 text-white font-sans font-black px-12 py-6 rounded-full shadow-xl transition-all transform hover:scale-105 active:scale-95 text-xl flex items-center gap-3">
+                <button className="bg-slate-900 hover:bg-slate-900/90 text-white font-sans font-black px-12 py-6 rounded-full shadow-xl transition-all transform hover:scale-105 active:scale-95 text-xl flex items-center gap-3">
                   Register Now <ChevronRight size={24} />
                 </button>
               </Link>

@@ -2,21 +2,23 @@
 // backend/includes/auth.php
 
 function authenticate() {
-    // Try to get Authorization header from multiple sources
     $authHeader = '';
     
-    // Method 1: Check $_SERVER['HTTP_AUTHORIZATION'] (most reliable)
+    // 1. Check $_SERVER['HTTP_AUTHORIZATION']
     if (!empty($_SERVER['HTTP_AUTHORIZATION'])) {
         $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
     }
-    // Method 2: Check $_SERVER['AUTHORIZATION']
+    // 2. Check REDIRECT_HTTP_AUTHORIZATION
+    elseif (!empty($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+        $authHeader = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+    }
+    // 3. Check $_SERVER['AUTHORIZATION']
     elseif (!empty($_SERVER['AUTHORIZATION'])) {
         $authHeader = $_SERVER['AUTHORIZATION'];
     }
-    // Method 3: Use getallheaders() as fallback
-    else {
-        $headers = getallheaders();
-        // Check for Authorization key (case-insensitive)
+    // 4. Try apache_request_headers()
+    elseif (function_exists('apache_request_headers')) {
+        $headers = apache_request_headers();
         foreach ($headers as $key => $value) {
             if (strtolower($key) === 'authorization') {
                 $authHeader = $value;
@@ -24,9 +26,23 @@ function authenticate() {
             }
         }
     }
+    // 5. Use getallheaders()
+    elseif (function_exists('getallheaders')) {
+        $headers = getallheaders();
+        foreach ($headers as $key => $value) {
+            if (strtolower($key) === 'authorization') {
+                $authHeader = $value;
+                break;
+            }
+        }
+    }
+    // 6. Last Resort: Check $_GET['token']
+    elseif (!empty($_GET['token'])) {
+        $authHeader = 'Bearer ' . $_GET['token'];
+    }
 
     if (empty($authHeader)) {
-        sendResponse(false, null, "Unauthorized: Missing Authorization header", 401);
+        sendResponse(false, null, "Session expired. Please log in again.", 401);
     }
 
     // Extract Bearer token
@@ -44,7 +60,6 @@ function authenticate() {
 }
 
 function decodeJWT($token) {
-    // Require JWT_SECRET to be defined
     if (!defined('JWT_SECRET')) {
         throw new Exception("JWT_SECRET not configured");
     }
@@ -54,26 +69,21 @@ function decodeJWT($token) {
         throw new Exception("Invalid token format");
     }
 
-    // Verify signature
     $header = $parts[0];
     $payload = $parts[1];
     $signature = $parts[2];
     
-    // Calculate expected signature
     $expectedSignature = base64_encode(hash_hmac('sha256', "$header.$payload", JWT_SECRET, true));
     
-    // Compare signatures (constant-time comparison for security)
     if (!hash_equals($expectedSignature, $signature)) {
         throw new Exception("Invalid token signature");
     }
 
-    // Decode and validate payload
     $decodedPayload = json_decode(base64_decode($payload), true);
     if ($decodedPayload === null) {
         throw new Exception("Invalid token payload");
     }
 
-    // Check expiration
     if (isset($decodedPayload['exp']) && $decodedPayload['exp'] < time()) {
         throw new Exception("Token expired");
     }

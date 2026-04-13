@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 
 const categories = featuredCategories.map(cat => ({
   ...cat,
-  count: "0+", // Reflecting reset state
-  color: cat.id % 2 === 0 ? "bg-[#C9973A]" : "bg-[#1B4332]" // Using brand colors
+  count: cat.count + "+",
+  color: cat.id % 2 === 0 ? "bg-indigo-600" : "bg-slate-900"
 }));
 
 const container = {
@@ -14,7 +14,7 @@ const container = {
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1
+      staggerChildren: 0.05
     }
   }
 };
@@ -26,24 +26,24 @@ const item = {
 
 export default function FeaturedGrid() {
   return (
-    <section className="py-20 bg-[var(--accent-light)]">
+    <section className="py-24 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <motion.span 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-[#C9973A] font-sans font-bold uppercase tracking-widest text-xs"
+            className="text-indigo-600 font-sans font-bold uppercase tracking-widest text-[10px]"
           >
-            Explore Popular
+            Elite Selection
           </motion.span>
           <motion.h2 
             initial={{ y: 20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
-            className="text-4xl md:text-5xl font-display font-bold mt-2 text-[#1B4332]"
+            className="text-4xl md:text-5xl font-display font-bold mt-3 text-slate-900"
           >
-            Browse Top Categories
+            Curated Categories
           </motion.h2>
-          <div className="w-24 h-1 bg-[#C9973A] mx-auto mt-6 rounded-full" />
+          <div className="w-16 h-1.5 bg-indigo-600 mx-auto mt-6 rounded-full" />
         </div>
 
         <motion.div 
@@ -55,16 +55,16 @@ export default function FeaturedGrid() {
         >
           {categories.map((cat, idx) => (
             <motion.div key={idx} variants={item}>
-              <Link to={`/category/${cat.slug}`} className="group block">
-                <div className="bg-white rounded-3xl p-8 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl border border-gray-100 group-hover:border-[#C9973A]/20">
-                  <div className={`w-16 h-16 ${cat.color} text-white rounded-2xl mx-auto flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform`}>
-                    <cat.icon className="w-8 h-8" />
+              <Link to={`/category/${cat.slug}`} className="group block h-full">
+                <div className="bg-white h-full rounded-[2rem] p-8 text-center transition-all duration-500 hover:-translate-y-2 hover:shadow-card border border-slate-100 group-hover:border-indigo-100">
+                  <div className={`w-14 h-14 ${cat.color} text-white rounded-2xl mx-auto flex items-center justify-center mb-6 shadow-lg group-hover:rotate-6 transition-all duration-500`}>
+                    <cat.icon className="w-6 h-6" />
                   </div>
-                  <h3 className="font-display font-bold text-lg text-[#1B4332] group-hover:text-[#C9973A] transition-colors">
+                  <h3 className="font-display font-bold text-slate-900 group-hover:text-indigo-600 transition-colors leading-tight">
                     {cat.name}
                   </h3>
-                  <p className="text-sm font-sans text-gray-500 mt-2 font-medium">
-                    {cat.count} listings
+                  <p className="text-[10px] font-sans text-slate-400 mt-3 font-black uppercase tracking-widest">
+                    {cat.count} Listings
                   </p>
                 </div>
               </Link>
@@ -72,10 +72,10 @@ export default function FeaturedGrid() {
           ))}
         </motion.div>
 
-        <div className="text-center mt-16">
+        <div className="text-center mt-20">
           <Link to="/categories">
-            <Button size="lg" className="bg-[#1B4332] hover:bg-[#1B4332]/90 text-white font-sans font-bold px-10 py-7 text-lg rounded-full shadow-xl">
-              Show All 316 Categories
+            <Button size="lg" className="bg-slate-900 hover:bg-slate-800 text-white font-sans font-bold px-12 py-8 text-sm rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95">
+              Explore All {featuredCategories.length * 10}+ Categories
             </Button>
           </Link>
         </div>

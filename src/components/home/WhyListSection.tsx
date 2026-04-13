@@ -15,42 +15,42 @@ const benefits = [
 
 export default function WhyListSection() {
   return (
-    <section className="py-16 md:py-24 bg-[#1B4332] relative overflow-hidden">
+    <section className="py-24 bg-slate-950 relative overflow-hidden">
       {/* Decorative background elements */}
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#C9973A]/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/4" />
-      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-white/5 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/4" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-white/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/4" />
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+        <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
 
-          {/* Right Column - Content (Order swapped for better flow on dark) */}
+          {/* Right Column - Content */}
           <div className="w-full lg:w-3/5 order-2 lg:order-1">
-            <div className="mb-10">
-              <span className="text-[#C9973A] text-[10px] font-black uppercase tracking-[0.4em] mb-3 block drop-shadow-sm">Why Partner With Us?</span>
-              <h2 className="text-3xl font-display font-bold md:text-5xl text-white tracking-tight leading-tight italic">
-                Dominate the <span className="text-[#C9973A] not-italic">Salem Local Market.</span>
+            <div className="mb-14">
+              <span className="text-indigo-400 text-[10px] font-black uppercase tracking-[0.4em] mb-4 block">The Value Proposition</span>
+              <h2 className="text-4xl font-display font-bold md:text-6xl text-white tracking-tight leading-[1.1]">
+                Master the <br className="hidden md:block" /> <span className="text-indigo-400">Salem Ecosystem.</span>
               </h2>
-              <p className="mt-4 text-base font-sans text-white/70 max-w-xl leading-relaxed">
-                Join Salem's most exclusive network. We provide the elite exposure and digital credibility you need to leave competitors in the rearview.
+              <p className="mt-8 text-lg font-sans text-slate-400 max-w-xl leading-relaxed">
+                Join Salem's most exclusive network. We provide the elite exposure and digital authority you need to outpace the competition.
               </p>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-6 sm:grid-cols-2">
               {benefits.map((b, i) => (
                 <motion.div
                   key={b.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.6 }}
-                  className="flex flex-col gap-4 rounded-[1.5rem] border border-white/10 bg-white/5 p-6 backdrop-blur-md transition-all duration-500 hover:bg-white/10 hover:-translate-y-1 group"
+                  transition={{ delay: i * 0.05, duration: 0.6 }}
+                  className="flex flex-col gap-5 rounded-[2rem] border border-white/5 bg-white/[0.03] p-8 backdrop-blur-md transition-all duration-500 hover:bg-white/[0.07] hover:border-indigo-500/30 group"
                 >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#C9973A] text-white shadow-lg group-hover:scale-110 transition-transform">
-                    <b.icon size={20} strokeWidth={2.5} />
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-indigo-600 text-white shadow-xl group-hover:rotate-12 transition-transform duration-500">
+                    <b.icon size={22} strokeWidth={2.5} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-display font-bold text-white mb-2 tracking-wide">{b.title}</h3>
-                    <p className="text-xs font-sans font-medium text-white/50 leading-relaxed group-hover:text-white/80 transition-colors">{b.desc}</p>
+                    <h3 className="text-xl font-display font-bold text-white mb-2 tracking-wide font-display">{b.title}</h3>
+                    <p className="text-sm font-sans text-slate-400 leading-relaxed group-hover:text-slate-200 transition-colors">{b.desc}</p>
                   </div>
                 </motion.div>
               ))}
@@ -59,8 +59,8 @@ export default function WhyListSection() {
 
           {/* Left Column - Image */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1, ease: "easeOut" }}
             className="w-full lg:w-2/5 order-1 lg:order-2"
@@ -69,9 +69,9 @@ export default function WhyListSection() {
               <img
                 src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80"
                 alt="Business Elite"
-                className="w-full h-full object-cover grayscale brightness-75 group-hover:grayscale-0 transition-all duration-1000"
+                className="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-75 transition-all duration-1000"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1B4332] via-transparent to-transparent opacity-60"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
               <div className="absolute inset-0 border-2 border-white/10 rounded-[3rem] pointer-events-none"></div>
             </div>
           </motion.div>

@@ -4,7 +4,9 @@ import HeroCarousel from "@/components/home/HeroCarousel";
 import StatsCounter from "@/components/home/StatsCounter";
 import FeaturedGrid from "@/components/home/FeaturedGrid";
 import HowItWorks from "@/components/home/HowItWorks";
-import { motion } from "framer-motion";
+import FloatingSearch from "@/components/home/FloatingSearch";
+import FeaturedBusinesses from "@/components/home/FeaturedBusinesses";
+
 
 export default function Index() {
   return (

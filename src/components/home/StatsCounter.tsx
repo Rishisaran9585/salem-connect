@@ -48,33 +48,28 @@ const Counter = ({ target, suffix = "" }: CounterProps) => {
 
 export default function StatsCounter() {
   return (
-    <section className="relative py-12 md:py-20 overflow-hidden border-y border-border">
-      {/* Background Image */}
-      <div className="absolute inset-0 w-full h-full">
-        <img
-          src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200"
-          alt="Platform Statistics"
-          className="w-full h-full object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-black/85 backdrop-blur-[1px]"></div>
+    <section className="relative py-16 md:py-24 overflow-hidden border-y border-white/5 bg-slate-950">
+      {/* Background with slight grid or overlay */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div className="absolute inset-0" style={{ backgroundImage: "radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0)", backgroundSize: "32px 32px" }}></div>
       </div>
 
       <div className="container relative z-10 mx-auto px-4">
-        <div className="grid grid-cols-2 gap-4 md:gap-6 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-6 md:gap-10 md:grid-cols-4">
           {stats.map((s, i) => (
             <motion.div
               key={s.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.6 }}
-              className="flex flex-col items-center text-center p-4 md:p-6 rounded-xl bg-white/5 border border-white/10 glass-effect"
+              className="group flex flex-col items-center text-center p-8 rounded-[2rem] bg-white/[0.03] border border-white/10 hover:border-indigo-500/30 hover:bg-white/[0.05] transition-all duration-500"
             >
-              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
-                <s.icon className="h-5 w-5 text-white" />
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-500/10 group-hover:bg-indigo-500/20 transition-colors">
+                <s.icon className="h-6 w-6 text-indigo-400" />
               </div>
               <Counter target={s.value} suffix={s.suffix} />
-              <p className="mt-2 text-[10px] font-sans font-bold text-white/50 uppercase tracking-[0.2em]">{s.label}</p>
+              <p className="mt-3 text-[11px] font-sans font-bold text-slate-400 uppercase tracking-[0.2em]">{s.label}</p>
             </motion.div>
           ))}
         </div>

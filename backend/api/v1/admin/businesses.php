@@ -14,7 +14,7 @@ if ($method === 'GET') {
     $status = $_GET['status'] ?? 'all';
     $search = $_GET['search'] ?? '';
     
-    $sql = "SELECT b.*, c.name as category_name 
+    $sql = "SELECT b.*, b.is_verified as verified, c.name as category_name 
             FROM businesses b 
             LEFT JOIN categories c ON b.category_id = c.id 
             WHERE 1=1";
@@ -41,6 +41,11 @@ if ($method === 'GET') {
     $stmt->execute($params);
     $businesses = $stmt->fetchAll();
     
+    // Explicitly parse is_verified to boolean mapping if PDO returned strings
+    foreach ($businesses as &$biz) {
+        $biz['verified'] = (bool)$biz['verified'];
+    }
+    
     sendResponse(true, $businesses);
 } else if ($method === 'PUT') {
     // Approve or Reject or Update business
@@ -63,7 +68,7 @@ if ($method === 'GET') {
     }
     
     if ($verified !== null) {
-        $updateFields[] = "verified = ?";
+        $updateFields[] = "is_verified = ?";
         $params[] = $verified ? 1 : 0;
     }
     

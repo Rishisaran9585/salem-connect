@@ -14,7 +14,7 @@ if ($method === 'GET') {
                                FROM businesses b 
                                LEFT JOIN categories c ON b.category_id = c.id 
                                LEFT JOIN subcategories s ON b.subcategory_id = s.id 
-                               WHERE b.slug = ? AND b.status = 'approved'");
+                               WHERE b.slug = ? AND b.status IN ('approved', 'pending')");
         $stmt->execute([$slug]);
         $business = $stmt->fetch();
         
@@ -28,7 +28,7 @@ if ($method === 'GET') {
         $stmt = $pdo->prepare("SELECT b.*, c.name as category_name 
                                FROM businesses b 
                                JOIN categories c ON b.category_id = c.id 
-                               WHERE c.slug = ? AND b.status = 'approved' 
+                               WHERE c.slug = ? AND b.status IN ('approved', 'pending') 
                                ORDER BY b.business_name ASC");
         $stmt->execute([$categorySlug]);
         $businesses = $stmt->fetchAll();
@@ -39,7 +39,7 @@ if ($method === 'GET') {
                                FROM businesses b 
                                LEFT JOIN categories c ON b.category_id = c.id 
                                WHERE (b.business_name LIKE ? OR b.description LIKE ? OR c.name LIKE ?) 
-                               AND b.status = 'approved' 
+                               AND b.status IN ('approved', 'pending') 
                                ORDER BY b.business_name ASC");
         $stmt->execute([$query, $query, $query]);
         $businesses = $stmt->fetchAll();
@@ -48,7 +48,7 @@ if ($method === 'GET') {
         $stmt = $pdo->query("SELECT b.*, c.name as category_name 
                              FROM businesses b 
                              LEFT JOIN categories c ON b.category_id = c.id 
-                             WHERE b.status = 'approved' 
+                             WHERE b.status IN ('approved', 'pending') 
                              ORDER BY b.created_at DESC LIMIT 20");
         $businesses = $stmt->fetchAll();
         sendResponse(true, $businesses);

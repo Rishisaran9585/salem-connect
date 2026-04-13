@@ -1,5 +1,5 @@
-﻿import { useState, useEffect, useRef } from "react";
-import { Plus, Search, Edit2, Trash2, Tag, LayoutGrid, CheckCircle, XCircle, Upload } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Plus, Search, Edit2, Trash2, Tag, LayoutGrid, CheckCircle, XCircle, Upload, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
@@ -15,6 +15,7 @@ interface Category {
   image_url: string;
   is_active: boolean;
   description?: string;
+  business_count?: number;
 }
 
 export default function AdminCategories() {
@@ -36,15 +37,10 @@ export default function AdminCategories() {
         headers: { Authorization: `Bearer ${localStorage.getItem("admin_token")}` }
       });
       if (response.data.success) {
-        console.log("Fetched categories:", response.data.data);
         setCategories(response.data.data);
-      } else {
-        toast.error("Failed to fetch categories");
-        console.error("Response:", response.data);
       }
     } catch (error: any) {
-      console.error("Failed to fetch categories:", error);
-      toast.error("Failed to fetch categories");
+      toast.error("Could not load categories.");
     } finally {
       setLoading(false);
     }
@@ -72,10 +68,10 @@ export default function AdminCategories() {
       });
       if (res.data.success) {
         setNewImage(res.data.data.url);
-        toast.success("Image uploaded successfully!");
+        toast.success("Image uploaded!");
       }
     } catch (error) {
-      toast.error("Failed to upload image");
+      toast.error("Upload failed.");
     } finally {
       setUploading(false);
     }
@@ -83,7 +79,7 @@ export default function AdminCategories() {
 
   const handleAddCategory = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newName) return toast.error("Category name is required");
+    if (!newName) return toast.error("Category name is required.");
 
     try {
       const response = await axios.post(API.admin.CATEGORIES, {
@@ -96,53 +92,51 @@ export default function AdminCategories() {
       });
 
       if (response.data.success) {
-        toast.success("Category added successfully!");
+        toast.success("Category created!");
         setShowAddForm(false);
         setNewName("");
         setNewIcon("folder");
         setNewImage("");
         setNewDescription("");
-        // Refresh the categories list
-        await fetchCategories();
-      } else {
-        toast.error(response.data.message || "Failed to add category");
-        console.error("Response:", response.data);
+        fetchCategories();
       }
     } catch (error: any) {
-      console.error("Error adding category:", error);
-      toast.error(error.response?.data?.message || "Error adding category");
+      toast.error("Error creating category.");
     }
   };
 
   const deleteCategory = async (id: number) => {
-    if (!window.confirm("Are you sure you want to delete this category?")) return;
+    if (!window.confirm("Delete this category? Businesses in this category will be affected.")) return;
 
     try {
       const response = await axios.delete(`${API.admin.CATEGORIES}?id=${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("admin_token")}` }
       });
       if (response.data.success) {
-        toast.success("Category deleted");
+        toast.success("Category deleted.");
         fetchCategories();
       }
     } catch (error) {
-      toast.error("Error deleting category");
+      toast.error("Error deleting.");
     }
   };
 
   return (
-    <div className="space-y-8 p-6">
-      <div className="flex justify-between items-center bg-white p-8 rounded-[2rem] shadow-xl">
-        <div>
-          <h1 className="text-3xl font-display font-bold text-[#1B4332]">Manage Categories</h1>
-          <p className="text-gray-500 font-sans mt-1">Add, browse, or edit business categories for Salem Directory.</p>
+    <div className="space-y-12 p-6 lg:p-14 bg-slate-50/50 min-h-screen">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 pb-4">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 mb-4">
+             <div className="w-2 h-2 bg-indigo-500 rounded-full" />
+             <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Manage Categories</p>
+          </div>
+          <h1 className="text-5xl font-display font-black text-slate-950 tracking-tighter uppercase italic">Categories</h1>
         </div>
         <Button 
           onClick={() => setShowAddForm(!showAddForm)}
-          className="bg-[#C9973A] hover:bg-[#C9973A]/90 text-white rounded-full px-8 py-6 font-bold flex gap-2"
+          className="bg-indigo-600 hover:bg-slate-950 text-white rounded-xl font-bold px-10 h-14 text-xs uppercase tracking-widest shadow-lg shadow-indigo-600/20"
         >
-          {showAddForm ? <XCircle /> : <Plus />}
-          {showAddForm ? "Cancel Adding" : "Add New Category"}
+          {showAddForm ? <XCircle className="mr-2 h-5 w-5" /> : <Plus className="mr-2 h-5 w-5" />}
+          {showAddForm ? "Cancel" : "Add Category"}
         </Button>
       </div>
 
@@ -152,111 +146,105 @@ export default function AdminCategories() {
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
-            className="bg-white p-10 rounded-[2.5rem] shadow-2xl border border-[#C9973A]/10"
+            className="bg-white p-10 lg:p-12 rounded-[2.5rem] shadow-xl border border-slate-50 relative overflow-hidden"
           >
-            <h2 className="text-xl font-display font-bold text-[#1B4332] mb-8 flex items-center gap-3">
-              <LayoutGrid className="w-6 h-6 text-[#C9973A]" />
-              New Category Details
-            </h2>
-            <form onSubmit={handleAddCategory} className="grid md:grid-cols-2 gap-8">
-              <div className="space-y-3">
-                <label className="text-sm font-bold text-gray-700 uppercase tracking-widest pl-2">Category Name *</label>
-                <Input 
-                  value={newName} 
-                  onChange={(e) => setNewName(e.target.value)} 
-                  placeholder="e.g. Restaurants" 
-                  className="rounded-xl border-gray-100 bg-gray-50 p-6 text-lg focus:ring-[#C9973A]"
-                />
-              </div>
-              <div className="space-y-3">
-                <label className="text-sm font-bold text-gray-700 uppercase tracking-widest pl-2">Lucide Icon Name</label>
-                <Input 
-                  value={newIcon} 
-                  onChange={(e) => setNewIcon(e.target.value)} 
-                  placeholder="e.g. utensils, car, home" 
-                  className="rounded-xl border-gray-100 bg-gray-50 p-6 text-lg"
-                />
-              </div>
-              <div className="space-y-3 md:col-span-2">
-                <label className="text-sm font-bold text-gray-700 uppercase tracking-widest pl-2">Thumbnail Image</label>
-                <div className="flex gap-3">
-                  <input 
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleFileUpload}
-                    accept="image/*"
-                    disabled={uploading}
-                    className="hidden"
-                  />
-                  <Button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={uploading}
-                    className="flex-1 bg-secondary hover:bg-secondary/80 text-foreground flex gap-2"
-                  >
-                    <Upload className="h-4 w-4" />
-                    {uploading ? "Uploading..." : "Upload Image"}
-                  </Button>
-                </div>
-                {newImage && (
-                  <div className="mt-3">
-                    <img src={newImage} alt="Preview" className="w-full h-32 object-cover rounded-lg" />
-                    <p className="text-xs text-success mt-2">✓ Image uploaded</p>
-                  </div>
-                )}
-              </div>
-              <div className="space-y-3 md:col-span-2">
-                <label className="text-sm font-bold text-gray-700 uppercase tracking-widest pl-2">Description</label>
-                <textarea 
-                  value={newDescription}
-                  onChange={(e) => setNewDescription(e.target.value)}
-                  rows={3}
-                  placeholder="Brief description of the category..."
-                  className="w-full rounded-xl border border-gray-100 bg-gray-50 p-6 text-lg focus:outline-none focus:ring-2 focus:ring-[#C9973A]"
-                />
-              </div>
-              <Button type="submit" className="md:col-span-2 bg-[#1B4332] hover:bg-[#1B4332]/90 py-8 rounded-2xl text-xl font-bold shadow-xl border-none">
-                Save Category to Directory
-              </Button>
-            </form>
+            <div className="relative z-10">
+               <h2 className="text-2xl font-bold text-slate-950 mb-10 flex items-center gap-4">
+                 <LayoutGrid className="w-8 h-8 text-indigo-600" />
+                 Category Details
+               </h2>
+               <form onSubmit={handleAddCategory} className="grid md:grid-cols-2 gap-8">
+                 <div className="space-y-3">
+                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Category Name</label>
+                   <Input 
+                     value={newName} 
+                     onChange={(e) => setNewName(e.target.value)} 
+                     placeholder="e.g. Restaurants" 
+                     className="h-14 rounded-xl border-slate-100 bg-slate-50 px-6 font-bold"
+                   />
+                 </div>
+                 <div className="space-y-3">
+                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Icon Name (Optional)</label>
+                   <Input 
+                     value={newIcon} 
+                     onChange={(e) => setNewIcon(e.target.value)} 
+                     placeholder="e.g. shopping-bag" 
+                     className="h-14 rounded-xl border-slate-100 bg-slate-50 px-6 font-bold"
+                   />
+                 </div>
+                 <div className="space-y-3 md:col-span-2">
+                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Category Image</label>
+                   <div className="flex gap-4">
+                     <input type="file" ref={fileInputRef} onChange={handleFileUpload} accept="image/*" disabled={uploading} className="hidden" />
+                     <Button type="button" onClick={() => fileInputRef.current?.click()} disabled={uploading} className="h-14 flex-1 rounded-xl bg-slate-50 text-slate-600 font-bold text-xs border border-slate-100">
+                       <Upload className="h-4 w-4 mr-2" />
+                       {uploading ? "Uploading..." : "Click to select image"}
+                     </Button>
+                   </div>
+                   {newImage && (
+                     <div className="mt-6 flex items-center gap-4 p-4 rounded-xl bg-emerald-50 border border-emerald-100">
+                       <img src={newImage} alt="Preview" className="w-12 h-12 object-cover rounded-lg" />
+                       <p className="text-xs font-bold text-emerald-600">Image ready!</p>
+                     </div>
+                   )}
+                 </div>
+                 <div className="space-y-3 md:col-span-2">
+                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Description</label>
+                   <textarea 
+                     value={newDescription}
+                     onChange={(e) => setNewDescription(e.target.value)}
+                     rows={3}
+                     placeholder="Write a short description..."
+                     className="w-full rounded-xl border border-slate-100 bg-slate-50 p-6 font-bold focus:outline-none focus:ring-2 focus:ring-indigo-600 min-h-[120px]"
+                   />
+                 </div>
+                 <Button type="submit" className="md:col-span-2 h-16 bg-slate-950 hover:bg-slate-900 text-white rounded-xl text-lg font-bold uppercase tracking-widest shadow-xl">
+                   Save Category
+                 </Button>
+               </form>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Categories Grid List */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {loading ? (
-          <p className="p-10 text-center col-span-full font-sans animate-pulse">Loading categories...</p>
+             <div className="col-span-full py-20 flex flex-col items-center justify-center space-y-4">
+                <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Loading Categories...</p>
+             </div>
         ) : (
           categories.map((cat) => (
-            <div key={cat.id} className="bg-white rounded-[2rem] shadow-lg hover:shadow-2xl transition-all border border-gray-100 group overflow-hidden">
-              {cat.image_url && (
-                <div className="h-32 overflow-hidden bg-gray-100">
-                  <img src={cat.image_url} alt={cat.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
-                </div>
-              )}
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-14 h-14 bg-[#1B4332]/5 rounded-2xl flex items-center justify-center text-[#C9973A] group-hover:bg-[#C9973A] group-hover:text-white transition-all transform group-hover:rotate-6 shadow-md">
-                    <Tag className="w-6 h-6" />
+            <div key={cat.id} className="bg-white rounded-[2.5rem] shadow-lg border border-slate-50 group hover:shadow-indigo-600/5 transition-all overflow-hidden relative">
+              <div className="h-40 bg-slate-100 relative overflow-hidden">
+                {cat.image_url ? (
+                  <img src={cat.image_url} alt={cat.name} className="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-500" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                     <Tag className="w-10 h-10 text-slate-300" />
                   </div>
-                  <div className="flex gap-1">
-                    <button className="p-2 text-gray-400 hover:text-blue-500 rounded-lg hover:bg-blue-50">
+                )}
+                
+                <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all">
+                    <button className="p-2 bg-white/90 rounded-lg text-slate-600 hover:text-indigo-600 shadow-sm transition-colors">
                       <Edit2 className="w-4 h-4" />
                     </button>
-                    <button 
-                      onClick={() => deleteCategory(cat.id)}
-                      className="p-2 text-gray-400 hover:text-red-500 rounded-lg hover:bg-red-50"
-                    >
+                    <button onClick={() => deleteCategory(cat.id)} className="p-2 bg-white/90 rounded-lg text-red-500 hover:bg-red-500 hover:text-white shadow-sm transition-all">
                       <Trash2 className="w-4 h-4" />
                     </button>
-                  </div>
                 </div>
-                <h3 className="text-xl font-display font-bold text-[#1B4332] line-clamp-1">{cat.name}</h3>
-                <p className="text-sm font-sans text-gray-400 font-bold uppercase tracking-widest mt-1">/category/{cat.slug}</p>
-                <div className="mt-4 flex items-center justify-between text-xs font-bold text-[#1B4332]/60 bg-gray-50 p-3 rounded-xl border border-gray-100">
-                  <span>STATUS: {cat.is_active ? "ACTIVE" : "INACTIVE"}</span>
-                  {cat.is_active && <CheckCircle className="w-3 h-3 text-[#22C55E]" />}
+              </div>
+              
+              <div className="p-8 space-y-4">
+                <h3 className="text-xl font-bold text-slate-900 line-clamp-1">{cat.name}</h3>
+                <div className="pt-4 border-t border-slate-50 flex items-center justify-between">
+                   <div className="space-y-1">
+                      <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Businesses</p>
+                      <p className="text-xl font-bold text-slate-900">{cat.business_count || 0}</p>
+                   </div>
+                   <div className="w-8 h-8 rounded-lg bg-slate-50 text-slate-300 flex items-center justify-center">
+                      <ChevronRight size={16} />
+                   </div>
                 </div>
               </div>
             </div>

@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Lock, AlertCircle } from "lucide-react";
@@ -36,47 +36,53 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-primary p-4">
-      <div className="w-full max-w-sm rounded-xl bg-card p-8 shadow-elevated">
-        <div className="mb-6 text-center">
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-            <Lock className="h-6 w-6 text-primary" />
+    <div className="flex min-h-screen items-center justify-center bg-slate-950 p-4 relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-600/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/4" />
+      
+      <div className="w-full max-w-md rounded-[2.5rem] bg-white p-10 lg:p-12 shadow-2xl relative z-10">
+        <div className="mb-10 text-center">
+          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[2rem] bg-indigo-600 shadow-xl shadow-indigo-600/20 rotate-12">
+            <Lock className="h-10 w-10 text-white -rotate-12" />
           </div>
-          <h1 className="text-xl font-display font-bold text-foreground">Admin Login</h1>
-          <p className="mt-1 text-xs font-body text-muted-foreground">Salem Directory Admin Panel</p>
+          <h1 className="text-3xl font-display font-black text-slate-900 tracking-tight">Salem <span className="text-indigo-600 italic">Connect</span></h1>
+          <p className="mt-3 text-[10px] font-black uppercase text-slate-400 tracking-[0.3em]">Management Portal</p>
         </div>
         
         {error && (
-          <div className="mb-6 flex items-center gap-3 rounded-lg bg-red-50 p-4 text-xs font-bold text-red-600 border border-red-100 animate-shake">
-            <AlertCircle className="h-4 w-4" />
+          <div className="mb-8 flex items-center gap-3 rounded-2xl bg-red-50 p-5 text-sm font-bold text-red-600 border border-red-100">
+            <AlertCircle className="h-5 w-5" />
             <span>{error}</span>
           </div>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="text-sm font-sans font-medium text-foreground">Email</label>
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Email Address</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm font-sans"
-              placeholder="admin@salemdirectory.in"
+              className="w-full rounded-2xl border border-slate-100 bg-slate-50 px-6 py-4 text-sm font-sans font-bold focus:outline-none focus:ring-2 focus:ring-indigo-600/20 transition-all"
+              placeholder="Salembusiness37@gmail.com"
             />
           </div>
-          <div>
-            <label className="text-sm font-sans font-medium text-foreground">Password</label>
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Secure Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm font-sans"
+              className="w-full rounded-2xl border border-slate-100 bg-slate-50 px-6 py-4 text-sm font-sans font-bold focus:outline-none focus:ring-2 focus:ring-indigo-600/20 transition-all"
               placeholder="••••••••"
             />
           </div>
-          <Button type="submit" className="w-full bg-primary text-primary-foreground font-sans">
-            Sign In
+          <Button type="submit" className="w-full h-14 bg-indigo-600 hover:bg-slate-950 text-white rounded-2xl font-sans font-bold text-lg shadow-xl shadow-indigo-600/20 transition-all hover:-translate-y-1">
+            Access Dashboard
           </Button>
+          <div className="text-center">
+            <Link to="/" className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-300 hover:text-indigo-600 transition-colors">← Back to Directory</Link>
+          </div>
         </form>
       </div>
     </div>

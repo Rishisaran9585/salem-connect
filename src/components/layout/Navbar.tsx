@@ -6,8 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
   { to: "/", label: "Home" },
-  { to: "/categories", label: "Categories" },
   { to: "/about", label: "About" },
+  { to: "/categories", label: "Category" },
   { to: "/contact", label: "Contact" },
 ];
 
@@ -25,29 +25,24 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'glass-effect py-3' : 'bg-transparent py-5'}`}>
+    <header className="sticky top-0 z-50 bg-slate-950/95 py-4 border-b border-white/5 backdrop-blur-md">
       <div className="container mx-auto flex items-center justify-between px-4">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-1 group">
-          <span className={`text-2xl font-display font-bold tracking-tight transition-colors duration-500 ${scrolled ? 'text-[#1B4332]' : 'text-white'}`}>Salem</span>
-          <span className={`text-2xl font-display font-light transition-colors duration-500 ${scrolled ? 'text-[#C9973A]' : 'text-[#C9973A]'}`}>Business</span>
+          <span className="text-2xl font-display font-bold tracking-tight text-white">Salem</span>
+          <span className="text-2xl font-display font-light text-indigo-400">Business</span>
         </Link>
 
-        {/* Desktop Nav */}
         <nav className="hidden items-center gap-2 md:flex">
-          <div className={`flex items-center gap-1 rounded-full px-2.5 py-1.5 shadow-sm border transition-all duration-500 ${
-            scrolled 
-            ? 'bg-white/80 dark:bg-black/80 backdrop-blur-md border-gray-100' 
-            : 'bg-white/10 backdrop-blur-sm border-white/20'
-          }`}>
+          <div className="flex items-center gap-1 rounded-full px-2.5 py-1.5 shadow-sm border bg-white/5 backdrop-blur-sm border-white/10">
             {navLinks.map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
                 className={`rounded-full px-5 py-2 text-sm font-sans font-bold tracking-tight transition-all duration-300 ${
                   location.pathname === l.to
-                  ? scrolled ? "bg-[#1B4332] text-white shadow-lg" : "bg-[#C9973A] text-white shadow-lg"
-                  : scrolled ? "text-[#4B5563] hover:text-[#1B4332]" : "text-white/90 hover:text-white"
+                  ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/20"
+                  : "text-white/80 hover:text-white"
                 }`}
               >
                 {l.label}
@@ -59,10 +54,8 @@ export default function Navbar() {
         {/* CTA */}
         <div className="hidden md:block">
           <Link to="/register">
-            <Button className={`rounded-full font-sans font-bold shadow-elevated hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-500 px-8 py-6 h-auto border-none ${
-              scrolled ? 'bg-[#1B4332] text-white' : 'bg-[#C9973A] text-white'
-            }`}>
-              <Plus className="mr-2 h-5 w-5" /> Register Business
+            <Button className="rounded-full font-sans font-bold shadow-indigo-500/20 shadow-lg hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all duration-500 px-8 py-6 h-auto border-none bg-indigo-600 text-white">
+              <Plus className="mr-2 h-5 w-5" /> List Your Business
             </Button>
           </Link>
         </div>
