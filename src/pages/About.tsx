@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
 import {
   ShieldCheck, MapPin, CheckCircle2, TrendingUp, Users, 
-  Target, Zap, Rocket, Star, History, Building2, ChevronRight,
-  ArrowRight, Landmark, Briefcase
+  Target, Zap, Rocket, ChevronRight,
+  ArrowRight, Briefcase, Info, CreditCard, BarChart3,
+  AlertTriangle, Megaphone, Search
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/layout/Navbar";
@@ -29,52 +30,72 @@ const roadmap = [
   { year: "2026", title: "Elite Network", desc: "Introducing AI-powered business matching and lead generation for premium members." }
 ];
 
+const operationalGuidelines = [
+  {
+    icon: Search,
+    title: "Business Information",
+    desc: "We collect and index publicly available business details across Salem. While we verify information, users should confirm details directly before making decisions."
+  },
+  {
+    icon: ShieldCheck,
+    title: "Verification Process",
+    desc: "To maintain database integrity, owners may be requested to provide location photographs or visiting cards for manual vetting."
+  },
+  {
+    icon: CreditCard,
+    title: "Registration & Fees",
+    desc: "Effective Feb 19, 2025, a one-time non-refundable processing fee of ₹150 is charged for new business registrations to support platform maintenance."
+  },
+  {
+    icon: Info,
+    title: "Data Collection",
+    desc: "We only store business metadata (Name, Address, Contact, Email, Website). We do not collect or process personal or confidential user data."
+  },
+  {
+    icon: BarChart3,
+    title: "Analytics & Order",
+    desc: "Businesses are displayed alphabetically within categories. We collect anonymous traffic data (IP, browser) for analytical purposes."
+  },
+  {
+    icon: AlertTriangle,
+    title: "Fraud Prevention",
+    desc: "Exercising caution during transactions is advised. We do not endorse specific listings and are not responsible for financial interactions."
+  }
+];
+
 export default function About() {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
 
       <main className="overflow-hidden">
-        {/* Cinematic Hero */}
-        <section className="bg-gradient-hero pt-24 pb-24 md:pt-32 md:pb-32 relative overflow-hidden">
-          {/* Decorative background elements */}
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/4" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-white/5 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/3" />
-
-          <div className="container mx-auto px-4 text-center relative z-10">
+        {/* Standard Immersive Hero Section */}
+        <section className="bg-slate-900 pt-20 pb-12 md:pt-28 md:pb-20 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-white/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/4" />
+          
+          <div className="container mx-auto px-4 relative z-10 text-center">
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6 }}
-              className="inline-block"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
             >
-              <span className="bg-white/10 backdrop-blur-md border border-white/20 px-6 py-2 rounded-full text-indigo-400 font-sans font-black uppercase tracking-[0.3em] text-[10px] mb-8 block shadow-2xl">
-                The Elite Directory Interface
+              <span className="inline-block px-4 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 text-[10px] font-black uppercase tracking-[0.4em] mb-8 shadow-2xl backdrop-blur-sm">
+                Official Directory • Salem District
               </span>
+              <h1 className="text-5xl md:text-8xl font-display font-black text-white mb-8 leading-[1] tracking-tighter">
+                Our Story. <br className="hidden md:block" /> 
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-indigo-200 to-white italic">Your Success.</span>
+              </h1>
+              <p className="max-w-2xl mx-auto text-lg md:text-xl text-white/50 font-sans leading-relaxed font-medium">
+                Pioneering the digital transformation of Salem's local commerce since 2016. We bridge local heritage with high-performance modern technology.
+              </p>
             </motion.div>
-            
-            <motion.h1
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.8 }}
-              className="text-4xl md:text-7xl font-display font-black text-white mb-8 leading-[1.1] tracking-tighter drop-shadow-2xl"
-            >
-              Beyond the <br className="hidden lg:block" /> <span className="text-indigo-400 italic">Yellow Pages.</span>
-            </motion.h1>
-            
-            <motion.p
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-              className="max-w-3xl mx-auto text-lg md:text-xl font-sans text-white/70 leading-relaxed font-medium drop-shadow-lg"
-            >
-              We are not just a list. We are the digital heartbeat of Salem District, transforming local commerce into a high-performance network for the modern age.
-            </motion.p>
           </div>
         </section>
 
-        {/* Floating Stats - Overlapping Hero */}
-        <section className="container mx-auto px-4 -mt-16 mb-20 relative z-20">
+        {/* Stats Section - Floating Overlap */}
+        <section className="container mx-auto px-4 -mt-20 mb-10 relative z-20">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {stats.map((s, idx) => (
               <motion.div 
@@ -95,60 +116,8 @@ export default function About() {
           </div>
         </section>
 
-        {/* Narrative: The Heritage Section */}
-        <section className="py-20 container mx-auto px-4">
-          <div className="grid lg:grid-cols-12 gap-10 items-center">
-            <motion.div
-              initial={{ x: -100, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              viewport={{ once: true }}
-              className="lg:col-span-5 relative"
-            >
-              <div className="absolute -top-10 -left-10 w-48 h-48 bg-indigo-600/10 rounded-full blur-[60px]" />
-              <span className="text-indigo-400 text-[10px] font-black uppercase tracking-[0.3em] mb-3 block">Our Origin Story</span>
-              <h2 className="text-4xl md:text-5xl font-display font-bold text-indigo-600 mb-6 leading-tight">
-                Roots in <span className="italic">Steel</span> & Silk.
-              </h2>
-              <p className="text-gray-500 text-base font-sans leading-relaxed mb-6">
-                Salem has always been a city of commerce. From the historic weaving sheds of Shevapet to the modern steel plants that define our horizon.
-              </p>
-              <p className="text-indigo-600 text-lg font-display font-bold leading-relaxed border-l-4 border-indigo-500 pl-6 italic">
-                In 2024, we realized that while Salem's businesses were strong, their digital presence was scattered. Salem Business was built to unify our local economy.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              className="lg:col-span-7 grid grid-cols-2 gap-4"
-            >
-              <div className="space-y-4 pt-8">
-                 <div className="rounded-[2rem] overflow-hidden aspect-[4/5] shadow-xl group relative">
-                    <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=600" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#1B4332] to-transparent opacity-40"></div>
-                 </div>
-                 <div className="bg-indigo-600 rounded-[2rem] p-6 text-white flex flex-col justify-end aspect-square shadow-lg">
-                    <Star size={32} className="mb-4 animate-pulse" />
-                    <h4 className="text-xl font-display font-bold tracking-tight">Salem's First Digital Index.</h4>
-                 </div>
-              </div>
-              <div className="space-y-4">
-                 <div className="bg-slate-900 rounded-[2rem] p-8 text-white aspect-square flex flex-col justify-center items-center text-center shadow-lg">
-                    <Landmark size={40} className="text-indigo-400 mb-4" />
-                    <p className="font-display font-bold text-base">Honoring 150+ Years of Local Trade</p>
-                 </div>
-                 <div className="rounded-[2rem] overflow-hidden aspect-[4/6] shadow-xl group relative border-4 border-white">
-                    <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=600" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 grayscale" />
-                    <div className="absolute inset-0 border-4 border-white/20 rounded-[2rem] m-2 pointer-events-none"></div>
-                 </div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
         {/* Digital Transformation Section */}
-        <section className="bg-slate-900 py-20 relative overflow-hidden mt-10">
+        <section className="bg-slate-900 py-20 relative overflow-hidden">
            <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-indigo-600/20 rounded-full blur-[80px]" />
            <div className="container mx-auto px-4 relative z-10">
               <div className="text-center mb-16 max-w-2xl mx-auto">
@@ -224,6 +193,54 @@ export default function About() {
                  </div>
               </div>
            </div>
+        </section>
+
+        {/* Operational Transparency Section */}
+        <section className="py-20 bg-gray-50/50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16 max-w-2xl mx-auto">
+              <span className="text-indigo-400 text-[10px] font-black uppercase tracking-[0.4em] mb-4 block">Transparency First</span>
+              <h2 className="text-4xl font-display font-bold text-indigo-600 mb-6">Connecting Businesses, Empowering Growth.</h2>
+              <p className="text-gray-500 font-sans text-base">
+                Salem Connect (Salem Business) is a premium directory platform designed to bridge the gap between local enterprise and the digital consumer.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {operationalGuidelines.map((item, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 group"
+                >
+                  <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500">
+                    <item.icon size={26} />
+                  </div>
+                  <h4 className="text-lg font-display font-bold text-indigo-900 mb-3">{item.title}</h4>
+                  <p className="text-gray-500 text-sm font-sans leading-relaxed">{item.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="mt-16 bg-white p-8 rounded-[2.5rem] border border-gray-100 flex flex-col md:flex-row items-center gap-8 shadow-sm">
+                <div className="w-16 h-16 bg-slate-900 rounded-2xl flex-shrink-0 flex items-center justify-center text-indigo-400">
+                    <Megaphone size={32} />
+                </div>
+                <div className="flex-grow">
+                    <h5 className="text-xl font-display font-bold text-indigo-900 mb-1">Advertising & Listings</h5>
+                    <p className="text-gray-500 text-sm font-sans">To support our technical infrastructure and growth, we display verified advertisements across the platform. Data collection for the Salem directory has been active since 2016.</p>
+                </div>
+                <div className="flex-shrink-0 text-right">
+                    <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest block mb-2">Need Support?</p>
+                    <Link to="/contact" className="text-indigo-600 font-display font-bold flex items-center justify-end gap-2 hover:gap-3 transition-all">
+                        Contact Verification Team <ArrowRight size={18} />
+                    </Link>
+                </div>
+            </div>
+          </div>
         </section>
 
         {/* Call to Action Final */}

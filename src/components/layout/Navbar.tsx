@@ -25,49 +25,54 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-950/95 py-4 border-b border-white/5 backdrop-blur-md">
-      <div className="container mx-auto flex items-center justify-between px-4">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-1 group">
-          <span className="text-2xl font-display font-bold tracking-tight text-white">Salem</span>
-          <span className="text-2xl font-display font-light text-indigo-400">Business</span>
-        </Link>
-
-        <nav className="hidden items-center gap-2 md:flex">
-          <div className="flex items-center gap-1 rounded-full px-2.5 py-1.5 shadow-sm border bg-white/5 backdrop-blur-sm border-white/10">
-            {navLinks.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                className={`rounded-full px-5 py-2 text-sm font-sans font-bold tracking-tight transition-all duration-300 ${
-                  location.pathname === l.to
-                  ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/20"
-                  : "text-white/80 hover:text-white"
-                }`}
-              >
-                {l.label}
-              </Link>
-            ))}
-          </div>
-        </nav>
-
-        {/* CTA */}
-        <div className="hidden md:block">
-          <Link to="/register">
-            <Button className="rounded-full font-sans font-bold shadow-indigo-500/20 shadow-lg hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all duration-500 px-8 py-6 h-auto border-none bg-indigo-600 text-white">
-              <Plus className="mr-2 h-5 w-5" /> List Your Business
-            </Button>
+    <header className="sticky top-0 z-50 w-full transition-all duration-300">
+      <div className={`w-full py-3 transition-all duration-300 ${scrolled ? "bg-slate-950/95 shadow-2xl backdrop-blur-md" : "bg-slate-950"}`}>
+        <div className="container mx-auto flex items-center justify-between px-4">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2 group">
+            <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-lg">
+              S
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xl font-display font-black tracking-tighter text-white leading-none">SalemBusiness</span>
+              <span className="text-[10px] font-sans font-bold text-white/30 uppercase tracking-widest leading-none">The Elite Network</span>
+            </div>
           </Link>
-        </div>
 
-        {/* Mobile toggle */}
-        <button
-          className="md:hidden p-2 rounded-full bg-white/50 backdrop-blur-md border border-border/50 text-foreground"
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+          <nav className="hidden items-center gap-8 md:flex">
+                {navLinks.map((l) => (
+                  <Link
+                    key={l.to}
+                    to={l.to}
+                    className={`text-sm font-sans font-black tracking-tight transition-all duration-300 ${
+                      location.pathname === l.to
+                      ? "text-[#45b1a9]"
+                      : "text-white/70 hover:text-white"
+                    }`}
+                  >
+                    {l.label}
+                  </Link>
+                ))}
+          </nav>
+
+          {/* CTA */}
+          <div className="hidden md:flex items-center gap-6">
+            <Link to="/register">
+              <Button className="rounded-full font-sans font-black shadow-xl hover:-translate-y-0.5 transition-all duration-500 px-8 py-5 h-auto border-none bg-[#45b1a9] hover:bg-[#38918a] text-white">
+                Register Now
+              </Button>
+            </Link>
+          </div>
+
+          {/* Mobile toggle */}
+          <button
+            className="md:hidden p-2 rounded-xl bg-white/5 border border-white/10 text-white"
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -77,7 +82,7 @@ export default function Navbar() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-t border-border/50 md:hidden glass-effect absolute w-full top-full"
+            className="overflow-hidden border-t border-white/5 md:hidden bg-slate-950 absolute w-full top-full shadow-2xl"
           >
             <nav className="flex flex-col gap-1 p-6">
               {navLinks.map((l) => (
@@ -85,16 +90,16 @@ export default function Navbar() {
                   key={l.to}
                   to={l.to}
                   onClick={() => setOpen(false)}
-                  className={`rounded-xl px-4 py-3 text-base font-sans font-medium transition-colors ${location.pathname === l.to
-                    ? "bg-primary/10 text-primary font-semibold"
-                    : "text-muted-foreground hover:bg-secondary"
+                  className={`rounded-xl px-4 py-4 text-base font-sans font-black transition-colors ${location.pathname === l.to
+                    ? "bg-[#45b1a9]/10 text-[#45b1a9]"
+                    : "text-white/60 hover:bg-white/5"
                     }`}
                 >
                   {l.label}
                 </Link>
               ))}
               <Link to="/register" onClick={() => setOpen(false)} className="mt-4">
-                <Button className="w-full rounded-xl bg-primary font-sans text-primary-foreground py-6 text-base">
+                <Button className="w-full rounded-2xl bg-[#45b1a9] font-sans font-black text-white py-6 h-auto text-base">
                   <Plus className="mr-2 h-5 w-5" /> Register Business
                 </Button>
               </Link>

@@ -248,13 +248,9 @@ export default function BusinessDetail() {
                                   <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-sans">Proprietor Name</span>
                                   <span className="font-sans font-bold text-indigo-600 text-lg">{business.owner_name}</span>
                                </div>
-                               <div className="flex justify-between items-center py-4 border-b border-gray-200">
+                               <div className="flex justify-between items-center py-4">
                                   <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-sans">Verified ID</span>
                                   <span className="font-sans font-bold text-indigo-400 text-lg">#SC-24{business.id}X</span>
-                               </div>
-                               <div className="flex justify-between items-center py-4">
-                                  <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-sans">Market Tenure</span>
-                                  <span className="font-sans font-bold text-indigo-600 text-lg">8+ Years of Excellence</span>
                                </div>
                             </div>
                         </div>
