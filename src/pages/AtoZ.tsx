@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, MapPin, Building2, ChevronRight, LayoutGrid, Info, ShieldCheck, Clock, List, Briefcase } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -77,7 +77,7 @@ export default function AtoZ() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <main>
-        <div className="bg-gradient-hero pt-32 pb-12 md:pt-40 md:pb-16">
+        <div className="bg-gradient-hero pb-12 md:pb-16">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-3xl font-display font-bold md:text-5xl text-primary-foreground mb-6">
               A-Z {mode === "businesses" ? "Business" : "Category"} Directory
@@ -114,7 +114,7 @@ export default function AtoZ() {
         </div>
 
         {/* Sticky Alphabet Tabs */}
-        <div className="sticky top-24 z-40 py-6 bg-white/80 backdrop-blur-md rounded-[2.5rem] shadow-xl border border-gray-100 flex flex-wrap justify-center gap-2 px-10 container mx-auto mb-12">
+        <div className="sticky top-[132px] z-40 py-6 bg-white/80 backdrop-blur-md rounded-[2.5rem] shadow-xl border border-gray-100 flex flex-wrap justify-center gap-2 px-10 container mx-auto mb-12">
           {alphabet.map((letter) => (
             <button
               key={letter}

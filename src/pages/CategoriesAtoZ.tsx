@@ -21,7 +21,7 @@ export default function CategoriesAtoZ() {
       <Navbar />
       <main>
         {/* Hero Section */}
-        <div className="bg-gradient-hero pt-32 pb-12 md:pt-40 md:pb-16 text-center">
+        <div className="bg-gradient-hero pb-12 md:pb-16 text-center">
           <div className="container mx-auto px-4">
             <h1 className="text-4xl md:text-5xl font-display font-bold text-primary-foreground">
               A-Z Category Archive
@@ -33,7 +33,7 @@ export default function CategoriesAtoZ() {
         </div>
 
         {/* Alphabet Navigation */}
-        <div className="sticky top-20 z-40 bg-white/100 backdrop-blur-md border-b border-gray-100 py-6">
+        <div className="sticky top-[132px] z-40 bg-white/100 backdrop-blur-md border-b border-gray-100 py-6">
           <div className="container mx-auto px-4 flex flex-wrap justify-center gap-2">
             {alphabet.map((letter) => (
               <button

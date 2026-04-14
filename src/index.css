@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -43,6 +43,7 @@
 
     --font-display: 'Outfit', sans-serif;
     --font-sans: 'Inter', system-ui, sans-serif;
+    --font-serif: 'Playfair Display', serif;
 
     /* Enhanced Gradients */
     --gradient-hero: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
@@ -116,6 +117,7 @@
 @layer utilities {
   .font-display { font-family: var(--font-display); }
   .font-sans { font-family: var(--font-sans); }
+  .font-serif { font-family: var(--font-serif); }
 
   .bg-gradient-hero { background: var(--gradient-hero); }
   .bg-gradient-accent { background: var(--gradient-accent); }

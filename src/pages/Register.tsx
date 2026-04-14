@@ -11,7 +11,7 @@ import { useEffect } from "react";
 export default function Register() {
    const [isSubmitting, setIsSubmitting] = useState(false);
    const [currentStep, setCurrentStep] = useState(1);
-   const [categories, setCategories] = useState<{id: number, name: string}[]>([]);
+   const [categories, setCategories] = useState<{ id: number, name: string }[]>([]);
    const [formData, setFormData] = useState({
       your_name: "",
       business_name: "",
@@ -29,17 +29,17 @@ export default function Register() {
    });
 
    useEffect(() => {
-     const fetchCategories = async () => {
-       try {
-         const res = await axios.get("/backend/api/v1/categories.php");
-         if (res.data.success) {
-           setCategories(res.data.data);
+      const fetchCategories = async () => {
+         try {
+            const res = await axios.get("/backend/api/v1/categories.php");
+            if (res.data.success) {
+               setCategories(res.data.data);
+            }
+         } catch (err) {
+            console.error("Failed to fetch categories:", err);
          }
-       } catch (err) {
-         console.error("Failed to fetch categories:", err);
-       }
-     };
-     fetchCategories();
+      };
+      fetchCategories();
    }, []);
 
    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -71,12 +71,12 @@ export default function Register() {
    return (
       <div className="min-h-screen bg-white flex flex-col">
          <Navbar />
-         <main className="flex-grow pt-32 pb-20 font-sans">
+         <main className="flex-grow pb-20 font-sans">
             <div className="container mx-auto px-4 max-w-7xl">
                <div className="mb-8">
                   <h1 className="text-3xl font-serif font-bold text-slate-900 mb-6">List Your Establishment</h1>
                   <div className="h-px bg-gray-200 w-full mb-8" />
-                  
+
                   {currentStep === 1 && (
                      <div className="space-y-4 mb-10">
                         <div className="flex items-start gap-2 text-sm">
@@ -88,7 +88,7 @@ export default function Register() {
                               <span className="text-[#3B82F6]">♦</span> Business listings will be displayed in alphabetical order on the business category page.
                            </li>
                            <li className="flex items-center gap-3 text-[13px] text-gray-700 font-medium">
-                              <span className="text-[#3B82F6]">♦</span> Verification and Processing Fee: <span className="font-bold text-gray-900">₹150 (One-time Fee).</span>
+                              <span className="text-[#3B82F6]">♦</span> Verification and Processing Fee: <span className="font-bold text-gray-900">₹4999 (Per Year).</span>
                            </li>
                            <li className="flex items-center gap-3 text-[13px] text-gray-700 font-medium">
                               <span className="text-[#3B82F6]">♦</span> Payment is non-refundable.
@@ -176,15 +176,15 @@ export default function Register() {
                   <div className="bg-white border border-dashed border-gray-300 rounded-[2rem] p-10 md:p-20 text-center space-y-10">
                      <div className="max-w-md mx-auto space-y-8">
                         <div className="space-y-2 text-slate-900">
-                           <h2 className="text-3xl font-serif font-bold italic text-indigo-600">Verification Fee: ₹150</h2>
+                           <h2 className="text-3xl font-serif font-bold italic text-indigo-600">Verification Fee: ₹4999</h2>
                            <p className="text-sm font-medium text-slate-500">Scan this QR to pay your one-time verification fee</p>
                         </div>
 
                         <div className="w-64 h-64 mx-auto border-4 border-indigo-100 rounded-[2rem] p-4 bg-slate-50 shadow-inner relative group flex items-center justify-center overflow-hidden">
                            <div className="absolute inset-0 bg-indigo-500/5 rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity" />
-                           <img 
-                              src="/payment-qr.jpeg" 
-                              alt="Payment QR Code" 
+                           <img
+                              src="/payment-qr.jpeg"
+                              alt="Payment QR Code"
                               className="w-full h-full object-contain rounded-xl"
                            />
                         </div>
@@ -196,8 +196,8 @@ export default function Register() {
                         </div>
 
                         <div className="flex flex-col gap-4">
-                           <Button 
-                              onClick={handleSubmit} 
+                           <Button
+                              onClick={handleSubmit}
                               disabled={isSubmitting}
                               className="bg-slate-950 hover:bg-slate-900 text-white h-14 rounded-full font-bold text-lg shadow-2xl transition-all hover:-translate-y-0.5"
                            >

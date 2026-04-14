@@ -33,8 +33,8 @@ export default function HeroCarousel() {
   const prev = () => setCurrent((c) => (c - 1 + slides.length) % slides.length);
 
   return (
-    <section className="relative w-full bg-black overflow-hidden">
-      <div className="mx-auto max-w-[1500px] aspect-[15/7] relative">
+    <section className="relative w-full h-auto aspect-video md:h-screen bg-white overflow-hidden">
+      <div className="w-full h-full relative">
         {/* Container for carousel */}
         <div className="relative w-full h-full">
           {/* Carousel Backgrounds */}
@@ -50,7 +50,7 @@ export default function HeroCarousel() {
               <img
                 src={slides[current].image_url}
                 alt="Salem Business"
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-contain md:object-cover"
               />
             </motion.div>
           </AnimatePresence>

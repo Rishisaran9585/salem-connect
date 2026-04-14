@@ -34,16 +34,16 @@ const featured = [
 
 export default function FeaturedBusinesses() {
   return (
-    <section className="py-24 bg-slate-50">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+    <section className="py-24 bg-white">
+      <div className="container mx-auto px-6 lg:px-20">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div className="max-w-xl">
-            <h2 className="text-sm font-sans font-bold text-indigo-600 uppercase tracking-widest mb-3">Elite Selection</h2>
-            <h3 className="heading-lg">Premium Establishments</h3>
-            <p className="mt-4 text-slate-600">Discover the most trusted and top-rated businesses in Salem, verified for quality and service excellence.</p>
+            <h2 className="text-sm font-black text-[#B8860B] uppercase tracking-[0.3em] mb-4">Elite Selection</h2>
+            <h3 className="text-4xl md:text-5xl font-serif font-black text-[#003131] leading-tight italic">Premium Establishment</h3>
+            <p className="mt-6 text-slate-500 font-medium leading-relaxed italic">Discover the most trusted and top-rated businesses in Salem, verified for quality and service excellence.</p>
           </div>
-          <Link to="/categories" className="text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors flex items-center gap-2 group">
-            Browse All Businesses <span className="group-hover:translate-x-1 transition-transform">→</span>
+          <Link to="/categories" className="text-xs font-black text-[#003131] hover:text-[#B8860B] uppercase tracking-widest transition-all flex items-center gap-3 group border-b-2 border-[#B8860B]/20 pb-2">
+            Browse All Businesses <span className="group-hover:translate-x-2 transition-transform">→</span>
           </Link>
         </div>
 
@@ -57,36 +57,36 @@ export default function FeaturedBusinesses() {
               transition={{ delay: i * 0.1 }}
               className="bg-white rounded-3xl overflow-hidden shadow-card border border-slate-100 group hover:shadow-elevated transition-all"
             >
-              <div className="relative h-56">
-                <img src={biz.image} alt={biz.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                <div className="absolute top-4 left-4">
-                  <span className="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-indigo-600 border border-indigo-100 uppercase tracking-wider">
+              <div className="relative h-64">
+                <img src={biz.image} alt={biz.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div className="absolute top-6 left-6">
+                  <span className="bg-[#003131] backdrop-blur px-4 py-2 rounded-full text-[9px] font-black text-[#B8860B] border border-white/10 uppercase tracking-[0.2em] shadow-2xl">
                     {biz.category}
                   </span>
                 </div>
                 {biz.rating >= 4.8 && (
-                  <div className="absolute top-4 right-4">
-                    <div className="bg-indigo-600 text-white p-2 rounded-full shadow-lg">
-                      <ShieldCheck className="h-4 w-4" />
+                  <div className="absolute top-6 right-6">
+                    <div className="bg-[#B8860B] text-white p-3 rounded-2xl shadow-2xl border border-white/20 -rotate-3 hover:rotate-0 transition-transform">
+                      <ShieldCheck className="h-5 w-5" />
                     </div>
                   </div>
                 )}
               </div>
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-2">
-                  <h4 className="text-lg font-display font-bold text-slate-900">{biz.name}</h4>
-                  <div className="flex items-center gap-1 text-amber-500">
+              <div className="p-8">
+                <div className="flex justify-between items-start mb-3">
+                  <h4 className="text-xl font-serif font-black text-[#003131] italic">{biz.name}</h4>
+                  <div className="flex items-center gap-1.5 text-amber-500">
                     <Star className="h-4 w-4 fill-current" />
-                    <span className="text-sm font-sans font-bold">{biz.rating}</span>
+                    <span className="text-sm font-black">{biz.rating}</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-slate-500 text-sm mb-6">
-                  <MapPin className="h-4 w-4" />
+                <div className="flex items-center gap-2 text-slate-400 text-[11px] font-black uppercase tracking-widest mb-8">
+                  <MapPin size={14} className="text-[#B8860B]" />
                   <span>{biz.area}, Salem</span>
                 </div>
                 <Link 
                   to={`/business/${biz.slug}`}
-                  className="w-full inline-flex items-center justify-center h-12 rounded-xl border border-indigo-100 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all text-sm font-bold text-indigo-600"
+                  className="w-full inline-flex items-center justify-center h-14 rounded-2xl bg-[#003131] text-white hover:bg-[#B8860B] transition-all text-xs font-black uppercase tracking-[0.2em] shadow-lg hover:shadow-2xl hover:-translate-y-1"
                 >
                   View Profile
                 </Link>

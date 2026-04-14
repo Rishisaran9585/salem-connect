@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
-   MapPin, Phone, Mail, Globe, ShieldCheck,
-   Share2, ChevronRight, Award, CheckCircle2,
-   Clock, AlertTriangle, ArrowLeft, Star
+   MapPin, Phone, Globe, ShieldCheck,
+   ChevronLeft, CheckCircle2,
+   Clock, CreditCard, ChevronRight, Award, AlertTriangle, ListFilter, HelpCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import axios from "axios";
-import { sampleBusinesses, allCategories } from "@/data/categories";
+import { sampleBusinesses, allCategories, featuredCategories } from "@/data/categories";
+import { getCategoryContent } from "@/data/categoryContent";
 
 interface Business {
    id: number;
@@ -31,10 +32,24 @@ interface Business {
    logo_url?: string;
 }
 
+const otherCities = [
+  "Trichy (Tiruchirappalli)", "Tirupur (Tiruppur)", "Tuticorin (Thoothukudi)", "Chennai", 
+  "Coimbatore", "Madurai", "Erode", "Tirunelveli", "Vellore", "Dindigul", "Thanjavur", 
+  "Ranipet", "Sivakasi", "Karur", "Ooty", "Hosur", "Nagercoil", "Kanchipuram", 
+  "Komarapalayam", "Karaikudi", "Neyveli", "Cuddalore", "Kumbakonam", "Tiruvannamalai", 
+  "Ambur", "Arcot", "Ariyalur", "Chengalpattu", "Chidambaram", "Dharmapuri", 
+  "Kallakurichi", "Kanyakumari", "Kodaikanal", "Krishnagiri", "Kurichi", "Mahabalipuram", 
+  "Nagapattinam", "Namakkal", "Perambalur", "Pudukkottai", "Rajapalayam", "Ramanathapuram", 
+  "Sivaganga", "Tenkasi", "Theni", "Thiruvarur", "Virudhunagar", "Mayiladuthurai", "Alangulam"
+];
+
+const popularCategories = [
+  "AC Dealers", "AC Repair Shops", "Academies", "Academy - Architect", "Academy - Banking", "Academy - Biology", "Academy - Commerce", "Academy - Computer", "Academy - Cricket", "Academy - Dance", "Academy - Defence", "Academy - Economics", "Academy - English Speaking", "Academy - Fashion Designing", "Academy - Fine Arts", "Academy - Foreign Language", "Academy - Guitar", "Academy - Handwriting", "Academy - Harmonium", "Academy - IAS Coaching", "Academy - IELTS", "Academy - Judo Karate", "Academy - Maths", "Academy - Music", "Academy - NEET & IIT-JEE", "Academy - Physics", "Academy - Sports", "Academy - SSC Coaching", "Accountants", "Advertising Agency", "Tax Advocate", "Advocates", "Almirah Shops", "Aluminium Door Shops", "Ambulance Services", "Architects", "Artificial Jewellery Store", "Artists", "Ashram", "Astrologers", "Auto Parts Shops", "Ayurvedic Store (Pansari)", "Bags & Suitcases", "Bakeries", "Bangles Store", "Banks & ATM", "Banquet Halls", "Beauty Parlours", "Belt Shops", "Bhojnalaya", "Bicycle Shops", "Bio Products", "Biometric Device Shops", "Blood Banks", "Book Binding Shops", "Book Stores", "Borewell Contractors", "Boutiques", "Bricks Companies", "Builders", "Bungalows On Rent", "Cake Shops", "Car Bazaar", "Car Dealers", "Car Accessories & Decor", "Car Driving Schools", "Career Counsellors", "Carpenters", "Carpet Shops", "Caterers", "CCTV Camera Dealers", "Cement Dealers", "Certification Services", "Chair Shops", "Chartered Accountants", "Chemical Dealers", "Cinema Halls", "Cloth Collection Shops", "Cloth Emporium Shops", "Cloth House Shops", "Cloth Textile Shops", "Coaching Institutes", "Coal Merchants", "Colleges", "Community Centres", "Computer Printer Dealers", "Computer Shops", "Concrete Flooring Contractors", "Consultancy Firms", "Cosmetic Shops", "Cost Accountants", "Courier Services", "Crockery Shops", "CSC (Common Service Centers)", "Curtain Shops", "Cyber Cafe & Internet", "Cyber Security Services", "Deep Cleaning Services", "Departmental Stores", "Detective Agencies", "Dharam Kanta", "Dharamshalas", "Disposable Crockery Shops", "DJ Services", "Doctors - Acupressure", "Doctors - Audiologist & Speech", "Doctors - Ayurvedic", "Doctors - Cardiologist", "Doctors - Child Specialist", "Doctors - Clinics", "Doctors - Dentist", "Doctors - Endocrinologist", "Doctors - ENT", "Doctors - Eye Specialist", "Doctors - Gastroenterologist", "Doctors - General Surgeon", "Doctors - Gynaecologist", "Doctors - Hair Transplant", "Doctors - Homoeopathic", "Doctors - Hospital", "Doctors - Pathology Lab", "Doctors - Nephrologist", "Doctors - Neuro Surgeon", "Doctors - Neurologist", "Doctors - Oncologist", "Doctors - Orthopedic", "Doctors - Physician", "Doctors - Physiotherapy", "Doctors - Piles", "Doctors - Plastic Surgeon", "Doctors - Psychiatrist", "Doctors - Psychologist", "Doctors - Pulmonologist", "Doctors - Radiology (MRI, X-Ray)", "Doctors - Skin", "Doctors - Urologist", "Doctors - Veterinary", "Drainage Services", "Dry Cleaners", "Dry Fruits Shops", "Dupatta Shops", "E Rikshaw Dealers", "Electrical Shops", "Electricians", "Electronics Manufacturers", "Electronics Shops", "Elevators", "Event Planners", "Export Import Consultancy", "Fancy Dress On Rent", "Fancy Light Shops", "Finance Companies", "Fire Extinguisher Dealers", "Fish Aquarium Shops", "Flex Printing", "Flowers Shops", "Food Manufacturers", "Fruits Shops", "Furniture Shops", "Garments Shops", "Gas Agencies", "General Stores", "Generator Dealers & Repair Services", "Ghee Dealers", "Gift Shops", "Girls Wear Shops", "Glass Shops", "Gold Buyers", "Govt Schools", "Graphic Designers", "Gyms", "Hair Salons", "Handicraft Shops", "Handloom Shops", "Hardware & Tools Shops", "Home Appliance Dealers", "Home Decor Shops", "Hosiery Shops", "Hotels", "HVAC Consultants", "Ice Cream Parlours", "Ice Factories", "Immigration Consultants", "Industries", "Insurance Agents", "Insurance Companies", "Interior Designers", "Internet Connection Providers", "Inverter Battery Shops", "JCB & Crane On Rent", "Jewellers", "Juice Shops", "Kids Cloth Shops", "Kids Shoes Shops", "Kirana Stores", "Kitchen Appliance Dealers", "Kitchenware Shops", "Kurta Shops", "Laboratory And Scientific Equipments Dealers", "Ladies Footwear Shops", "Ladies Suits Shops", "Land Surveyors", "Laptop Shops", "Lehenga Shops", "Libraries", "Lithium Battery Manufacturers", "AI Cancer Detection Software Dealers", "Door & Window Manufacturers", "Corrugated Box Manufacturers", "Marble Dealers", "Marriage Bureaus", "Medical Agencies", "Medical Equipments Dealers", "Medical Halls", "Mens Wear Shops", "Milk Dairy Shops", "Mobile Repair Shops", "Mobile Stores", "Money Exchange", "Newspaper Agencies", "Nutritional Supplement Shops", "Office Furniture Shops", "Optical Shops", "Other Businesses", "Paan Shops", "Packers & Movers", "Paint Dealers", "Paper Mart Shops", "Parks", "Pest Control Services", "Pet Shops", "PG (Paying Guest)", "Pharmaceutical Companies", "Photo Frame Shops", "Photo Studios", "Photographers", "Photostat Xerox Shops", "Picture Shops", "Pizza Restaurants", "Plant Nurseries", "Play Schools", "Plumbers", "Plywood Dealers", "Pooja Samagri Stores", "Post Offices", "Poultry Farms", "Powder Coating Services", "Printing Presses", "Project Management Consultants", "Projectors On Rent", "Property Dealers", "Public Wifi Services", "Purse Shops", "Refrigeration Shops", "Rehabilitation Centres", "Resorts", "Restaurants", "RO Water Filters Dealers", "Sanitary Stores", "Sarees Retailers", "School Dress Uniforms", "Schools", "Scrap Dealers", "Jobs Placement", "Security Guard Services", "Seeds Store", "Sherwanis On Rent", "Shoe & Footwear Shops", "Shuttering & Scaffolding", "Sofa, Bed & Furniture Shops", "Software Companies", "Solar Panel Dealers", "Sound Speaker Shops", "Spa & Wellness", "Spice Manufacturers", "Sports Shops", "Sports Wear Shops", "Stabilizer Dealers", "Stamp Maker Shops", "Stamp Paper Shops", "Stationery Stores", "Steel Businesses", "Stenography Institutes", "Stock Brokers", "Stone Crusher Dealers", "Surgical Equipment Dealers", "Sweets Shops", "Swimming Classes", "Tailors", "Tank Cleaning Service", "Tattoo Artists", "Tea Shops", "Tent Houses", "Tiffin Services", "Tiles Dealers", "Timber Merchants", "TMT Bar (Sariya) Dealers", "Tools Shops", "Tour & Travels", "Toy Shops", "Trading Companies", "Transport Companies", "Two Wheeler Dealers", "Two Wheeler Repair & Services", "Tyre Shops", "Valuers & Engineers", "Vastu Consultants", "Vegetable Shops", "Car & Bike Washing Services", "Watches Shops", "Waterproofing Services", "Website Developers & Designers", "Wedding Card Shops", "Welding Workshops", "Wooden Works Shops", "Yoga Classes"
+];
+
 export default function BusinessDetail() {
    const { slug } = useParams();
    const [business, setBusiness] = useState<Business | null>(null);
-   const [relatedBusinesses, setRelatedBusinesses] = useState<any[]>([]);
    const [loading, setLoading] = useState(true);
 
    useEffect(() => {
@@ -42,33 +57,16 @@ export default function BusinessDetail() {
          try {
             const res = await axios.get(`/backend/api/v1/businesses.php?slug=${slug}`);
             if (res.data.success && res.data.data) {
-               const bizData = res.data.data;
-               setBusiness(bizData);
-               
-               // Fetch related businesses in the same category
-               try {
-                  const relatedRes = await axios.get(`/backend/api/v1/businesses.php?category=${bizData.category_slug}`);
-                  if (relatedRes.data.success) {
-                     // Filter out the current business
-                     const filtered = relatedRes.data.data.filter((b: any) => b.id !== bizData.id).slice(0, 4);
-                     setRelatedBusinesses(filtered);
-                  }
-               } catch (relatedErr) {
-                  console.error("Failed to fetch related businesses");
-               }
-
+               setBusiness(res.data.data);
                setLoading(false);
                return;
             }
-         } catch (err) {
-            console.error("Fetch failed, looking for local sample data...");
-         }
+         } catch (err) {}
 
-         // Search in local sample data if API fails or returns no success
          const localBiz = sampleBusinesses.find(b => b.slug === slug);
          if (localBiz) {
             const category = allCategories.find(c => c.id === localBiz.categoryId);
-            const mappedBiz = {
+            setBusiness({
                id: localBiz.id,
                slug: localBiz.slug,
                business_name: localBiz.businessName,
@@ -82,282 +80,180 @@ export default function BusinessDetail() {
                state: localBiz.state,
                pincode: localBiz.pincode,
                mobile: localBiz.mobile,
-               email: localBiz.email,
-               website: localBiz.website,
                verified: localBiz.verified
-            };
-            setBusiness(mappedBiz);
-            
-            // Map local related
-            const localRelated = sampleBusinesses
-               .filter(b => b.categoryId === localBiz.categoryId && b.id !== localBiz.id)
-               .slice(0, 4)
-               .map(b => ({
-                  id: b.id,
-                  slug: b.slug,
-                  business_name: b.businessName,
-                  category_name: b.categoryName,
-                  area: b.area
-               }));
-            setRelatedBusinesses(localRelated);
+            });
          }
-         
          setLoading(false);
       };
-      
       setLoading(true);
       fetchBusiness();
       window.scrollTo(0, 0);
    }, [slug]);
 
-   if (loading) {
-      return (
-         <div className="min-h-screen bg-white flex flex-col items-center justify-center space-y-6">
-            <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-            <p className="font-display font-bold text-indigo-600 text-xl animate-pulse uppercase tracking-widest">Gathering details...</p>
-         </div>
-      );
-   }
-
-   if (!business) {
-      return (
-         <div className="min-h-screen bg-slate-50">
-            <Navbar />
-            <main className="container mx-auto px-4 py-40 text-center">
-               <div className="max-w-md mx-auto space-y-10">
-                  <div className="w-24 h-24 bg-red-50 text-red-400 rounded-full flex items-center justify-center mx-auto shadow-inner">
-                     <AlertTriangle size={48} />
-                  </div>
-                  <div>
-                     <h2 className="text-3xl font-display font-bold text-indigo-600">Business Listing Missing</h2>
-                     <p className="text-gray-400 mt-4 font-sans leading-relaxed">
-                        We couldn't find the business you're looking for. It might have been relocated or the link is incorrect.
-                     </p>
-                  </div>
-                  <div className="flex flex-col gap-4">
-                     <Link to="/categories">
-                        <Button className="w-full bg-slate-900 rounded-2xl py-8 h-auto font-bold text-lg border-none shadow-xl">
-                           Browse All Categories
-                        </Button>
-                     </Link>
-                     <Link to="/">
-                        <Button variant="ghost" className="w-full text-indigo-600 font-bold py-4 h-auto flex items-center justify-center gap-2">
-                           <ArrowLeft size={18} /> Back to Home
-                        </Button>
-                     </Link>
-                  </div>
-               </div>
-            </main>
-            <Footer />
-         </div>
-      );
-   }
+   if (loading) return <div className="min-h-screen bg-white flex items-center justify-center"><div className="w-12 h-12 border-4 border-[#003131] border-t-transparent rounded-full animate-spin" /></div>;
+   if (!business) return <div className="text-center py-40">Not found</div>;
 
    return (
-      <div className="min-h-screen bg-slate-50 flex flex-col">
+      <div className="min-h-screen bg-[#FDFCF8] flex flex-col font-sans overflow-x-hidden">
          <Navbar />
          <main className="flex-grow">
-            <div className="bg-slate-900 pt-32 pb-12 md:pt-40 md:pb-24 relative overflow-hidden">
-               <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3" />
-               <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-white/5 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/4" />
-               
-               <div className="container mx-auto px-4 relative z-10">
-                  <div className="flex items-center gap-2 text-[10px] font-sans text-white/80 mb-10 uppercase tracking-[0.2em] font-black">
-                     <Link to="/" className="hover:text-indigo-400 transition-colors">Salem Business</Link>
-                     <ChevronRight className="h-3 w-3 text-indigo-400" />
-                     <Link to={`/category/${business.category_slug}`} className="hover:text-indigo-400 transition-colors">
-                        {business.category_name}
-                     </Link>
-                     <ChevronRight className="h-3 w-3 text-indigo-400" />
-                     <span className="text-white drop-shadow-sm">{business.business_name}</span>
+            {/* Header */}
+            <div className="bg-[#003131] pt-10 pb-24 relative overflow-hidden">
+               <div className="absolute inset-0 opacity-[0.08] pointer-events-none" style={{ backgroundImage: 'linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)', backgroundSize: '40px 40px', backgroundPosition: 'center' }} />
+               <div className="container mx-auto px-6 md:px-12 lg:px-40 relative z-10">
+                  <div className="mb-8">
+                    <Link to="/categories" className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white/20 text-[10px] font-black uppercase tracking-widest text-[#B8860B] bg-[#003131]/80 backdrop-blur-sm hover:border-[#B8860B] transition-all">
+                      <ChevronLeft size={16} /> , {business.category_name.toUpperCase()} ,
+                    </Link>
                   </div>
-                  
-                  <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
-                     <div className="space-y-6">
-                        <div className="flex flex-wrap items-center gap-4">
-                           <h1 className="text-4xl md:text-6xl font-display font-bold text-white tracking-tight">
-                              {business.business_name}
-                           </h1>
-                           {business.verified && (
-                              <div className="flex items-center gap-2 rounded-full bg-[#22C55E]/20 px-4 py-1.5 text-[10px] font-bold text-[#22C55E] uppercase tracking-widest border border-[#22C55E]/30">
-                                 <CheckCircle2 className="h-4 w-4" /> Verified Business
-                              </div>
-                           )}
-                        </div>
-                        <div className="flex items-center gap-6">
-                           <span className="px-5 py-2 bg-indigo-600 text-white text-xs font-bold uppercase tracking-widest rounded-full shadow-lg">
-                              {business.category_name}
-                           </span>
-                            <div className="flex items-center gap-1 text-indigo-400">
-                               {[1, 2, 3, 4, 5].map(i => <Star key={i} fill="currentColor" size={14} />)}
-                               <span className="text-white/90 text-xs font-black ml-3 uppercase tracking-widest drop-shadow-sm">4.8 <span className="text-white/60 font-sans ml-1 text-[10px]">(85 Verified Reviews)</span></span>
-                            </div>
-                        </div>
-                     </div>
-                     
-                     <div className="flex flex-wrap gap-4">
-                        <a href={`tel:${business.mobile}`} className="w-full sm:w-auto">
-                           <Button className="w-full bg-white hover:bg-white/90 text-indigo-600 rounded-2xl px-10 py-8 h-auto font-bold font-sans shadow-2xl text-lg border-none transform active:scale-95 transition-all">
-                              <Phone className="mr-3 w-6 h-6" /> {business.mobile}
-                           </Button>
-                        </a>
-                     </div>
+                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-black text-white mb-6 leading-tight capitalize">{business.business_name}</h1>
+                  <div className="flex items-center gap-3 text-white/80 text-base font-medium">
+                    <MapPin size={20} className="text-[#B8860B]" />
+                    <span>{business.address}, {business.area}, {business.city} – {business.pincode} ({business.state || 'Tamil Nadu'}) India</span>
                   </div>
                </div>
             </div>
 
-            <div className="container mx-auto px-4 -mt-12 mb-20 space-y-12 relative z-20">
-               {/* Main Profile Card */}
-               <div className="bg-white rounded-[3.5rem] p-10 lg:p-16 shadow-2xl border border-gray-100 flex flex-col lg:flex-row gap-16 relative group">
-                  <div className="absolute top-0 right-0 h-4 bg-indigo-600 w-1/4 rounded-full -translate-y-2 group-hover:w-1/2 transition-all duration-700" />
+            <div className="container mx-auto px-6 md:px-12 lg:px-40 -mt-10 mb-20 relative z-20 space-y-12">
+               {/* Contact Card */}
+               <div className="bg-white rounded-[24px] shadow-[0_30px_60px_rgba(0,0,0,0.12)] border border-slate-100 overflow-hidden">
+                  <div className="bg-[#003131] w-full py-5 px-8 flex items-center gap-4">
+                     <span className="text-[#B8860B] text-xl">✉</span>
+                     <h3 className="text-white font-bold text-lg tracking-tight">Contact & Location Details</h3>
+                  </div>
+                  <div className="p-8 lg:p-10 space-y-10">
+                     <div className="grid md:grid-cols-2 gap-6">
+                        <div className="bg-[#F8FBFC] rounded-[20px] p-6 border border-slate-50 flex gap-5 items-start">
+                           <div className="w-12 h-12 bg-[#EEE3CC] rounded-xl flex items-center justify-center shrink-0 shadow-sm border border-[#B8860B]/10"><MapPin className="text-[#967D33]" size={20} /></div>
+                           <div className="space-y-1"><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Address</p><p className="font-bold text-[#003131] text-sm leading-relaxed">{business.address}</p></div>
+                        </div>
+                        <div className="bg-[#F8FBFC] rounded-[20px] p-6 border border-slate-50 flex gap-5 items-start">
+                           <div className="w-12 h-12 bg-[#EEE3CC] rounded-xl flex items-center justify-center shrink-0 shadow-sm border border-[#B8860B]/10"><Globe className="text-[#967D33]" size={20} /></div>
+                           <div className="space-y-1"><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">City / State</p><p className="font-bold text-[#003131] text-sm leading-relaxed">{business.city} – {business.pincode} <br/> ({business.state || 'Tamil Nadu'}) India</p></div>
+                        </div>
+                     </div>
+                     <div className="w-full md:w-[360px]">
+                        <div className="bg-[#003131] rounded-[20px] p-6 flex gap-6 items-center shadow-lg">
+                           <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center shrink-0 border border-white/5"><Phone className="text-[#B8860B]" size={20} /></div>
+                           <div className="space-y-1"><p className="text-[9px] font-black text-white/30 uppercase tracking-widest">Mobile Number</p><p className="text-xl font-black text-[#B8860B] tracking-tight">{business.mobile}</p></div>
+                        </div>
+                     </div>
+                     <a href={`tel:${business.mobile}`} className="block"><Button className="w-full bg-[#967D33] hover:bg-[#856C2D] text-[#003131] text-lg font-serif font-black py-7 rounded-[15px] shadow-2xl flex items-center justify-center gap-4 transition-all hover:scale-[1.005] border-none group"><span>📞</span> Call {business.business_name}</Button></a>
+                  </div>
+               </div>
+
+               {/* Business Info */}
+               <div className="bg-white rounded-[24px] shadow-sm border border-slate-100 p-8 md:p-12">
+                  <h2 className="text-base font-serif font-black text-[#003131] mb-8 flex items-center gap-3"><Clock size={20} className="text-[#967D33]" />Business Info</h2>
+                  <div className="flex flex-wrap gap-4 mb-8">
+                    <div className="bg-[#F1F9F9] text-[#003131]/80 border border-[#003131]/10 px-6 py-3 rounded-full flex items-center gap-3 text-sm font-bold shadow-sm"><Clock size={16} className="text-[#967D33]" />Opens 10 AM (working days)</div>
+                    <div className="bg-[#F1F9F9] text-[#003131]/80 border border-[#003131]/10 px-6 py-3 rounded-full flex items-center gap-3 text-sm font-bold shadow-sm"><CreditCard size={16} className="text-[#967D33]" />Cash accepted · confirm other payment methods directly</div>
+                  </div>
+                  <p className="text-[11px] text-slate-400 font-medium pl-2">Hours and payment options are indicative. Please confirm directly with {business.business_name}.</p>
+               </div>
+
+               {/* Why Choose Section - UPDATED */}
+               <section className="bg-white rounded-[24px] shadow-sm border border-slate-100 p-8 md:p-12">
+                  <h2 className="text-xl font-serif font-black text-[#003131] mb-10 flex items-center gap-3 border-l-4 border-[#967D33] pl-4">Why Choose {business.business_name}?</h2>
+                  <div className="space-y-6">
+                    {[
+                      { t: "Prime Location", d: `Conveniently located in ${business.city} for easy access from all parts of the city.` },
+                      { t: "Expert Staff", d: "Dedicated and knowledgeable team committed to giving you the best guidance." },
+                      { t: "Additional Services", d: `${business.business_name} may provide value-added services. Contact them directly to know more about what they offer.` },
+                      { t: "Parking Available", d: `Parking space available for customers visiting ${business.business_name}.` }
+                    ].map((item, i) => (
+                      <div key={i} className="flex gap-4 group">
+                        <div className="w-6 h-6 rounded-full bg-[#003131] text-[#967D33] flex items-center justify-center shrink-0 mt-1 shadow-md group-hover:scale-110 transition-transform"><CheckCircle2 size={14} /></div>
+                        <div className="space-y-1">
+                          <p className="font-black text-[#003131] text-lg">{item.t}</p>
+                          <p className="text-slate-500 leading-relaxed font-medium">{item.d}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+               </section>
+
+               {/* More Business Section - NEW */}
+               <section className="bg-white rounded-[24px] shadow-sm border border-slate-100 p-8 md:p-12">
+                  <h2 className="text-xl font-serif font-black text-[#003131] mb-10 flex items-center gap-3 border-l-4 border-[#967D33] pl-4">More , {business.category_name} , in {business.city}</h2>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {sampleBusinesses
+                      .filter(b => b.categoryName === business.category_name && b.slug !== business.slug)
+                      .slice(0, 6)
+                      .map((item, i) => (
+                        <Link key={i} to={`/business/${item.slug}`} className="p-5 rounded-2xl bg-slate-50 hover:bg-slate-100 transition-colors border border-slate-200/50 group">
+                           <h4 className="font-black text-[#003131] group-hover:text-[#967D33] transition-colors mb-2">{item.businessName}</h4>
+                           <p className="text-xs text-slate-500 flex gap-2"><MapPin size={12} className="shrink-0 text-[#967D33]" /> {item.address}</p>
+                        </Link>
+                      ))}
+                    {sampleBusinesses.filter(b => b.categoryName === business.category_name && b.slug !== business.slug).length === 0 && (
+                      <p className="text-slate-400 italic text-sm">No other businesses found in this category.</p>
+                    )}
+                  </div>
+               </section>
+
+               {/* Frequently Asked Questions - NEW */}
+               <section className="bg-white rounded-[24px] shadow-sm border border-slate-100 p-8 md:p-12">
+                  <h2 className="text-xl font-serif font-black text-[#003131] mb-12 flex items-center gap-3 border-l-4 border-[#967D33] pl-4"><HelpCircle size={22} className="text-[#967D33]" /> Frequently Asked Questions — {business.business_name}</h2>
+                  <div className="space-y-10">
+                    {[
+                      { q: `Where is ${business.business_name} located?`, a: `${business.business_name} is located at ${business.address}, ${business.area}, ${business.city} – ${business.pincode}, ${business.state || 'Tamil Nadu'}, India.` },
+                      { q: `What is the full address of ${business.business_name}?`, a: `The full address of ${business.business_name} is — ${business.address}, ${business.area}, ${business.city} - ${business.pincode}, ${business.state || 'Tamil Nadu'}, India.` },
+                      { q: `What is the pincode of ${business.business_name} in ${business.city}?`, a: `${business.business_name} is located in the ${business.pincode} pincode area of ${business.city}, ${business.state || 'Tamil Nadu'}.` },
+                      { q: `What is the contact number of ${business.business_name}?`, a: `You can contact ${business.business_name} at ${business.mobile}. Click here to call directly.` },
+                      { q: `What are the working hours of ${business.business_name}?`, a: `${business.business_name} opens at 10 AM on working days. For exact closing time and holiday schedule, please confirm directly with the business.` },
+                      { q: `Is ${business.business_name} open on Sunday?`, a: `${business.business_name} is listed as open on working days from 10 AM. Whether they operate on Sundays or public holidays should be confirmed directly by calling ${business.mobile}.` },
+                      { q: `What payment methods does ${business.business_name} accept?`, a: `${business.business_name} accepts cash payments. For UPI, card, or other payment modes, please confirm directly with the business before visiting.` },
+                      { q: `Does ${business.business_name} have staff available to assist?`, a: `Yes, ${business.business_name} has staff available to help customers with queries and services. For specific assistance, contact them directly.` },
+                      { q: `What services does ${business.business_name} offer?`, a: `${business.business_name} offers services related to , ${business.category_name} , in ${business.city}. For a detailed list of services or current offers, please contact them directly.` },
+                      { q: `What type of business is ${business.business_name}?`, a: `${business.business_name} falls under the , ${business.category_name} , category and serves customers in ${business.city} and surrounding areas of ${business.state || 'Tamil Nadu'}.` },
+                      { q: `Is ${business.business_name} located in ${business.city}?`, a: `Yes, ${business.business_name} is located in ${business.city}, ${business.state || 'Tamil Nadu'}, India.` }
+                    ].map((faq, i) => (
+                      <div key={i} className="space-y-4">
+                        <h4 className="text-lg font-black text-[#003131] border-l-2 border-[#967D33] pl-4">{faq.q}</h4>
+                        <p className="text-slate-500 italic text-sm pl-4 leading-relaxed">{faq.a}</p>
+                      </div>
+                    ))}
+                  </div>
+               </section>
+
+               {/* About Section - NEW */}
+               <section className="bg-white rounded-[24px] shadow-sm border border-slate-100 p-8 md:p-12">
+                  <h2 className="text-xl font-serif font-black text-[#003131] mb-6 flex items-center gap-3 border-l-4 border-[#967D33] pl-4">About {business.business_name}</h2>
+                  <p className="text-slate-600 leading-relaxed font-medium mb-10">
+                    {business.business_name} is a , {business.category_name} , business located in {business.city}, {business.state || 'Tamil Nadu'}, India. The office is situated at {business.address}. You can call them at {business.mobile} for inquiries or appointments. The office opens at 10 AM on working days. If you are looking for , {business.category_name} , in {business.city}, you can get in touch with {business.business_name} using the contact details mentioned on this page.
+                  </p>
                   
-                  {/* Photo / Logo Area */}
-                  <div className="lg:w-1/3 space-y-8">
-                     <div className="aspect-square bg-slate-50 rounded-[3rem] shadow-xl border border-gray-100 flex items-center justify-center text-indigo-400 text-8xl md:text-9xl font-display font-bold relative overflow-hidden group/img">
-                        {business.logo_url ? <img src={business.logo_url} className="w-full h-full object-cover" /> : (business.business_name ? business.business_name[0] : "?")}
-                        <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
-                           <Button variant="ghost" className="text-white border border-white/20 rounded-full font-bold">View Gallery</Button>
-                        </div>
-                     </div>
-                     
-                     <div className="grid grid-cols-3 gap-4">
-                        {[1, 2, 3].map(i => (
-                           <div key={i} className="aspect-square bg-gray-100 rounded-2xl flex items-center justify-center text-gray-300">
-                              <Star size={24} />
-                           </div>
-                        ))}
-                     </div>
+                  <div className="bg-amber-50 border border-amber-200 p-8 rounded-3xl flex gap-6 items-start">
+                    <div className="w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center shrink-0 text-white shadow-lg"><AlertTriangle size={24} /></div>
+                    <p className="text-xs text-amber-900 font-bold leading-relaxed">
+                      We do not endorse any specific business listed in this directory. Be cautious when making direct advance payments via UPI, Western Union, or similar services — transactions are at your own risk. For the most accurate and up-to-date information, please confirm directly with {business.business_name}.
+                    </p>
+                  </div>
+               </section>
+
+               {/* Discovery Sections */}
+               <div className="space-y-16 py-10 bg-[#003131]/[0.02] rounded-[40px] p-8 md:p-12 border border-slate-100 max-w-[1400px] mx-auto">
+                  <div className="space-y-10">
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.5em] text-[#967D33] text-center"><span className="text-xl mr-2">📍</span> {business.category_name} in Other Cities</h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                      {otherCities.map(city => (
+                        <Link key={city} to={`/search?q=${business.category_name} in ${city}`} className="px-4 py-3 bg-white border border-slate-100 rounded-[15px] text-[10px] font-black text-slate-500 hover:bg-[#003131] hover:text-[#967D33] transition-all shadow-sm text-center leading-tight min-h-[50px] flex items-center justify-center">{city}</Link>
+                      ))}
+                    </div>
                   </div>
 
-                  <div className="lg:w-2/3 space-y-12">
-                     <div className="space-y-8">
-                        <h2 className="text-3xl font-display font-bold text-indigo-600 flex items-center gap-4">
-                           About Our Establishment
-                           <div className="h-1 flex-grow bg-slate-50 rounded-full" />
-                        </h2>
-                         <p className="text-[#1F2937] font-sans text-xl leading-relaxed font-medium">
-                            {business.description || "Leading the way in premium services. We are dedicated to providing the highest quality experience for our customers in the heart of Salem. Visit us today to discover our standard of excellence."}
-                         </p>
-                     </div>
-
-                     <div className="grid md:grid-cols-2 gap-10">
-                        <div className="p-8 bg-slate-50 rounded-[2.5rem] border border-gray-100 space-y-4">
-                           <h4 className="font-display font-bold text-indigo-600 text-lg uppercase tracking-wide">Business Information</h4>
-                            <div className="space-y-4">
-                               <div className="flex justify-between items-center py-4 border-b border-gray-200">
-                                  <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-sans">Proprietor Name</span>
-                                  <span className="font-sans font-bold text-indigo-600 text-lg">{business.owner_name}</span>
-                               </div>
-                               <div className="flex justify-between items-center py-4">
-                                  <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest font-sans">Verified ID</span>
-                                  <span className="font-sans font-bold text-indigo-400 text-lg">#SC-24{business.id}X</span>
-                               </div>
-                            </div>
-                        </div>
-
-                        <div className="p-8 bg-slate-900 rounded-[2.5rem] text-white space-y-6 shadow-xl relative overflow-hidden">
-                           <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-600/20 blur-2xl rounded-full" />
-                           <h4 className="font-display font-bold text-lg uppercase tracking-wide relative z-10">Operating Hours</h4>
-                           <div className="space-y-3 relative z-10">
-                              <div className="flex justify-between text-sm">
-                                 <span className="text-white/40 font-bold uppercase tracking-widest text-[10px]">Monday - Saturday</span>
-                                 <span className="font-sans font-bold">9:00 AM - 9:00 PM</span>
-                              </div>
-                              <div className="flex justify-between text-sm">
-                                 <span className="text-white/40 font-bold uppercase tracking-widest text-[10px]">Sunday</span>
-                                 <span className="font-sans font-bold text-indigo-400">Closed</span>
-                              </div>
-                           </div>
-                           <Button className="w-full bg-indigo-600 border-none font-bold rounded-2xl py-6 hover:bg-white hover:text-indigo-600 transition-all">Schedule Visit</Button>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-
-               <div className="grid lg:grid-cols-12 gap-12">
-                  {/* Address Map Section Placeholder */}
-                  <div className="lg:col-span-12 bg-white rounded-[3.5rem] p-4 shadow-2xl border border-gray-100 min-h-[500px] overflow-hidden group relative">
-                     <div className="w-full h-full min-h-[500px] bg-slate-100 rounded-[2.5rem] relative overflow-hidden">
-                        <iframe
-                           width="100%"
-                           height="500"
-                           frameBorder="0"
-                           style={{ border: 0 }}
-                           src={`https://www.google.com/maps?q=${encodeURIComponent(business.business_name + " " + business.address + " " + business.area + " " + business.city)}&output=embed`}
-                           allowFullScreen
-                           loading="lazy"
-                           className="grayscale-[20%] contrast-[110%] brightness-[95%]"
-                        ></iframe>
-                        
-                        <div className="absolute bottom-6 left-6 right-6 md:bottom-10 md:left-10 md:right-10 bg-slate-950/90 backdrop-blur-xl p-8 md:p-10 rounded-[2.5rem] text-white flex flex-col md:flex-row justify-between items-center gap-8 shadow-2xl border border-white/5">
-                           <div className="space-y-3 text-center md:text-left">
-                              <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
-                                 <div className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" />
-                                 <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Permanent Establishment</p>
-                              </div>
-                              <h4 className="text-xl md:text-2xl font-display font-bold leading-tight max-w-sm">{business.address}</h4>
-                              <p className="text-white/40 text-[10px] font-black uppercase tracking-widest font-sans">{business.area}, {business.city}, {business.state} - {business.pincode}</p>
-                           </div>
-                           <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-                              <a 
-                                 href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(business.address + " " + business.city)}`}
-                                 target="_blank"
-                                 rel="noopener noreferrer"
-                              >
-                                 <Button className="w-full bg-indigo-600 hover:bg-white hover:text-indigo-600 border-none font-sans font-black rounded-2xl px-10 py-6 h-auto shadow-xl transition-all uppercase tracking-widest text-xs">
-                                    <MapPin className="mr-3 w-4 h-4" /> Get Directions
-                                 </Button>
-                              </a>
-                              <a href={`tel:${business.mobile}`}>
-                                 <Button variant="outline" className="w-full bg-white/5 border-white/10 text-white hover:bg-white/20 rounded-2xl px-10 py-6 h-auto transition-all font-black uppercase tracking-widest text-xs">
-                                    <Phone className="mr-3 w-4 h-4" /> Call Now
-                                 </Button>
-                              </a>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-
-               {/* Related Businesses */}
-               <div className="py-20">
-                  <div className="flex justify-between items-end mb-16 px-4">
-                     <div>
-                        <h2 className="text-4xl font-display font-bold text-indigo-600 mb-3">Similar Professionals</h2>
-                        <p className="text-indigo-400 font-bold font-sans uppercase tracking-[0.3em] text-xs">Based on {business.category_name}</p>
-                     </div>
-                     <Link to={`/category/${business.category_slug}`} className="group bg-white p-4 rounded-full shadow-lg border border-gray-100 flex items-center gap-3 pr-8 hover:bg-slate-900 hover:text-white transition-all">
-                        <div className="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center group-hover:rotate-90 transition-transform">
-                           <ChevronRight size={24} />
-                        </div>
-                        <span className="font-sans font-bold">View Category</span>
-                     </Link>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-                     {relatedBusinesses.length > 0 ? (
-                        relatedBusinesses.map((item, i) => (
-                           <Link key={i} to={`/business/${item.slug}`} className="group bg-white p-8 rounded-[3rem] shadow-xl border border-gray-100 hover:shadow-2xl hover:-translate-y-3 transition-all duration-500">
-                              <div className="w-20 h-20 bg-slate-50 rounded-[1.5rem] mb-8 flex items-center justify-center text-indigo-400 text-3xl font-display font-bold shadow-inner group-hover:bg-slate-900 group-hover:text-white transition-colors">
-                                 {item.business_name ? item.business_name[0] : (item.businessName ? item.businessName[0] : "?")}
-                              </div>
-                              <h4 className="text-xl font-display font-bold text-indigo-600 mb-2 line-clamp-1">{item.business_name || item.businessName}</h4>
-                              <p className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-6">{item.category_name || item.categoryName}</p>
-                              <div className="flex items-center gap-2 text-gray-400 text-[10px] font-bold uppercase tracking-widest">
-                                 <MapPin size={12} className="text-indigo-600/30" /> {item.area}
-                              </div>
-                           </Link>
-                        ))
-                     ) : (
-                        <div className="col-span-full py-16 text-center bg-slate-50 rounded-[3rem] border border-dashed border-slate-200">
-                           <p className="text-slate-400 font-sans font-bold uppercase tracking-widest text-xs">No similar professionals found in this category yet.</p>
-                        </div>
-                     )}
+                  <div className="space-y-10 pt-10 border-t border-slate-100/50">
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.5em] text-[#967D33] text-center"><span className="text-xl mr-2">🗂️</span> Popular Business Categories</h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                      {popularCategories.map(cat => (
+                        <Link key={cat} to={`/category/${cat.toLowerCase().replace(/ /g, '-').replace(/&/g, 'and')}`} className="px-4 py-3 bg-white border border-slate-100 rounded-[15px] text-[10px] font-black text-slate-400 hover:text-[#003131] hover:border-[#003131] transition-all shadow-sm text-center leading-tight min-h-[50px] flex items-center justify-center">{cat}</Link>
+                      ))}
+                    </div>
                   </div>
                </div>
             </div>
          </main>
-
          <Footer />
       </div>
    );

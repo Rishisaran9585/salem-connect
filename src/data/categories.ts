@@ -97,7 +97,8 @@ const initialAlphabetCategories: Record<string, string[]> = {
   T: ["🔗 TMT Bar (Sariya) Dealers","✂️ Tailors","🚰 Tank Cleaning Service","🖊️ Tattoo Artists","⚖️ Tax Advocate","☕ Tea Shops","⛺ Tent Houses","🥡 Tiffin Services","🟦 Tiles Dealers","🌲 Timber Merchants","🔧 Tools Shops","✈️ Tour & Travels","🧸 Toy Shops","🤝 Trading Companies","🚚 Transport Companies","🏍️ Two Wheeler Dealers","🔧 Two Wheeler Repair & Services","🛞 Tyre Shops"],
   V: ["📐 Valuers & Engineers","🧭 Vastu Consultants","🥦 Vegetable Shops"],
   W: ["⌚ Watches Shops","💧 Waterproofing Services","🌐 Website Developers & Designers","💌 Wedding Card Shops","🔥 Welding Workshops","🪵 Wooden Works Shops"],
-  Y: ["🧘 Yoga Classes"]
+  Y: ["🧘 Yoga Classes"],
+  Z: ["🧣 Zari Shops", "🦓 Zebra Blinds", "🧘 Zen Gardens", "🤐 Zip Repair"]
 };
 
 // Auto-merge allCategories disabled to strictly use initialAlphabetCategories

@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 const benefits = [
   { icon: TrendingUp, title: "Increased Exposure", desc: "Get your business in front of thousands of local customers actively searching for services." },
   { icon: Search, title: "Better Search Rankings", desc: "Improve your online visibility with SEO-optimized business listings." },
-  { icon: DollarSign, title: "Cost-Effective Marketing", desc: "One-time fee of ₹150 — no monthly subscriptions or hidden charges." },
+  { icon: DollarSign, title: "Cost-Effective Marketing", desc: "Only ₹4999 per year — access premium visibility with no hidden charges." },
   { icon: Smartphone, title: "Mobile Optimized", desc: "Your listing looks perfect on every device — phones, tablets, and desktops." },
   { icon: Target, title: "Targeted Audience", desc: "Reach people who are specifically looking for your type of business in Salem." },
   { icon: Star, title: "Build Credibility", desc: "Verified business badge builds trust with potential customers." },

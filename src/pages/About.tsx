@@ -44,7 +44,7 @@ const operationalGuidelines = [
   {
     icon: CreditCard,
     title: "Registration & Fees",
-    desc: "Effective Feb 19, 2025, a one-time non-refundable processing fee of ₹150 is charged for new business registrations to support platform maintenance."
+    desc: "A processing fee of ₹4999 is charged per year for new business registrations to support platform maintenance and premium visibility."
   },
   {
     icon: Info,
@@ -70,7 +70,7 @@ export default function About() {
 
       <main className="overflow-hidden">
         {/* Standard Immersive Hero Section */}
-        <section className="bg-slate-900 pt-20 pb-12 md:pt-28 md:pb-20 relative overflow-hidden">
+        <section className="bg-slate-900 pt-10 pb-12 md:pb-20 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-white/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/4" />
           
@@ -248,7 +248,7 @@ export default function About() {
           <div className="bg-gradient-accent p-12 md:p-20 rounded-[3.5rem] text-white overflow-hidden relative shadow-xl group">
             <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-white/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 group-hover:scale-125 transition-transform duration-1000" />
             <h2 className="text-4xl md:text-6xl font-display font-black mb-6 relative z-10 tracking-tighter leading-[1]">Be Part of Salem's <br /> #1 Network</h2>
-            <p className="text-white/80 font-sans text-base md:text-lg mb-10 relative z-10 max-w-2xl mx-auto font-medium">Verify your business today for a one-time fee of ₹150 and secure your position in the local digital hierarchy.</p>
+            <p className="text-white/80 font-sans text-base md:text-lg mb-10 relative z-10 max-w-2xl mx-auto font-medium">Verify your business today for a fee of ₹4999 per year and secure your position in the local digital hierarchy.</p>
             <div className="flex flex-col md:flex-row items-center justify-center gap-6 relative z-10">
               <Link to="/register">
                 <button className="bg-slate-900 hover:bg-slate-900/90 text-white font-sans font-black px-12 py-6 rounded-full shadow-xl transition-all transform hover:scale-105 active:scale-95 text-xl flex items-center gap-3">

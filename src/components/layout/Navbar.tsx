@@ -1,112 +1,99 @@
-import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Plus } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
-
-const navLinks = [
-  { to: "/", label: "Home" },
-  { to: "/about", label: "About" },
-  { to: "/categories", label: "Category" },
-  { to: "/contact", label: "Contact" },
-];
+import { Menu, X } from "lucide-react";
+import { useState } from "react";
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'About', path: '/about' },
+    { name: 'Category', path: '/categories' },
+    { name: 'Contact', path: '/contact' }
+  ];
 
   return (
-    <header className="sticky top-0 z-50 w-full transition-all duration-300">
-      <div className={`w-full py-3 transition-all duration-300 ${scrolled ? "bg-slate-950/95 shadow-2xl backdrop-blur-md" : "bg-slate-950"}`}>
-        <div className="container mx-auto flex items-center justify-between px-4">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-lg">
-              S
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xl font-display font-black tracking-tighter text-white leading-none">SalemBusiness</span>
-              <span className="text-[10px] font-sans font-bold text-white/30 uppercase tracking-widest leading-none">The Elite Network</span>
-            </div>
+    <>
+      <nav className="sticky top-0 left-0 right-0 z-[60] bg-[#001F3F]/95 backdrop-blur-md border-b border-white/5 py-3 md:py-4">
+        <div className="container mx-auto px-6 flex items-center justify-between">
+          <Link to="/" className="flex items-center group">
+            <svg width="140" height="70" viewBox="0 0 460 250" xmlns="http://www.w3.org/2000/svg" className="transition-transform group-hover:scale-105 md:w-[180px] md:h-[90px]">
+              {/* Background Speech Bubble */}
+              <path d="M30 20 h260 a30 30 0 0 1 30 30 v60 a30 30 0 0 1 -30 30 h-170 l-30 35 v-35 h-60 a30 30 0 0 1 -30 -30 v-60 a30 30 0 0 1 30 -30 z" fill="#E50914" />
+              <text x="65" y="95" fontFamily="Georgia, serif" fontSize="64" fill="white" fontWeight="bold">Salem</text>
+              <text x="50" y="210" fontFamily="Arial, sans-serif" fontSize="64" fill="#B8860B" fontWeight="900" letterSpacing="4">BUSINESS</text>
+            </svg>
           </Link>
 
-          <nav className="hidden items-center gap-8 md:flex">
-                {navLinks.map((l) => (
-                  <Link
-                    key={l.to}
-                    to={l.to}
-                    className={`text-sm font-sans font-black tracking-tight transition-all duration-300 ${
-                      location.pathname === l.to
-                      ? "text-[#45b1a9]"
-                      : "text-white/70 hover:text-white"
-                    }`}
-                  >
-                    {l.label}
-                  </Link>
-                ))}
-          </nav>
-
-          {/* CTA */}
-          <div className="hidden md:flex items-center gap-6">
-            <Link to="/register">
-              <Button className="rounded-full font-sans font-black shadow-xl hover:-translate-y-0.5 transition-all duration-500 px-8 py-5 h-auto border-none bg-[#45b1a9] hover:bg-[#38918a] text-white">
-                Register Now
-              </Button>
-            </Link>
+          {/* Desktop Nav Links */}
+          <div className="hidden md:flex items-center gap-10">
+            {navLinks.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                className="text-[11px] font-black uppercase tracking-[0.2em] text-white/70 hover:text-[#B8860B] transition-all"
+              >
+                {item.name}
+              </Link>
+            ))}
           </div>
 
-          {/* Mobile toggle */}
-          <button
-            className="md:hidden p-2 rounded-xl bg-white/5 border border-white/10 text-white"
-            onClick={() => setOpen(!open)}
-            aria-label="Toggle menu"
-          >
-            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
-        </div>
-      </div>
+          <div className="flex items-center gap-4">
+            <Link to="/register">
+              <Button className="bg-[#B8860B] hover:bg-white text-[#001F3F] text-[9px] md:text-[11px] font-black uppercase tracking-widest px-4 md:px-8 rounded-lg md:rounded-xl h-9 md:h-11 transition-all shadow-2xl hover:scale-105 active:scale-95">
+                Register <span className="hidden sm:inline">Now</span>
+              </Button>
+            </Link>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-t border-white/5 md:hidden bg-slate-950 absolute w-full top-full shadow-2xl"
-          >
-            <nav className="flex flex-col gap-1 p-6">
-              {navLinks.map((l) => (
+            {/* Mobile Toggle */}
+            <button 
+              className="md:hidden text-white p-2"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Simplified Mobile Menu Overlay */}
+        <div 
+          className={`fixed inset-0 z-[100] flex-col bg-[#001F3F] ${isOpen ? 'flex' : 'hidden'}`}
+          style={{ backgroundColor: '#001F3F', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
+        >
+           {/* Top Bar (Clean) */}
+           <div className="px-6 py-8 flex items-center justify-between shrink-0 bg-[#001F3F]">
+              <span className="text-xl font-display font-black text-white/70 tracking-tighter">Salem Business</span>
+              <button 
+                className="text-white p-2"
+                onClick={() => setIsOpen(false)}
+              >
+                <X size={28} />
+              </button>
+           </div>
+           
+           <div className="flex-grow flex flex-col items-center justify-center p-6 space-y-12 bg-[#001F3F]">
+             {navLinks.map((item) => (
                 <Link
-                  key={l.to}
-                  to={l.to}
-                  onClick={() => setOpen(false)}
-                  className={`rounded-xl px-4 py-4 text-base font-sans font-black transition-colors ${location.pathname === l.to
-                    ? "bg-[#45b1a9]/10 text-[#45b1a9]"
-                    : "text-white/60 hover:bg-white/5"
-                    }`}
+                  key={item.name}
+                  to={item.path}
+                  onClick={() => setIsOpen(false)}
+                  className="text-3xl font-black text-white hover:text-[#B8860B] transition-all text-center tracking-[0.2em] uppercase"
                 >
-                  {l.label}
+                  {item.name}
                 </Link>
               ))}
-              <Link to="/register" onClick={() => setOpen(false)} className="mt-4">
-                <Button className="w-full rounded-2xl bg-[#45b1a9] font-sans font-black text-white py-6 h-auto text-base">
-                  <Plus className="mr-2 h-5 w-5" /> Register Business
-                </Button>
-              </Link>
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </header>
+
+             <div className="w-full max-w-[280px] pt-10">
+                <Link to="/register" onClick={() => setIsOpen(false)}>
+                  <Button className="bg-[#B8860B] text-white text-sm font-black w-full py-8 rounded-full shadow-2xl uppercase tracking-widest">
+                    Register Business - ₹4999
+                  </Button>
+                </Link>
+             </div>
+           </div>
+        </div>
+      </nav>
+    </>
   );
 }
